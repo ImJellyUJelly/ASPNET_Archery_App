@@ -1,0 +1,88 @@
+﻿@using ArcheryApplication.Classes
+@model ArcheryApplication.Classes.Wedstrijd
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Wedstrijd</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Naam)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Naam)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Datum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Datum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Soort)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Soort)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Vereniging)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Vereniging.Naam)
+        </dd>
+    </dl>
+    <div class="dl-horizontal">
+        <table data-role="table" data-mode="columntoggle" class="table-bordered">
+            <thead>
+                <tr>
+                    <th class="col-md-3">Baan</th>
+                    <th class="col-md-3">Schutternaam</th>
+                    <th class="col-md-3">Discipline</th>
+                    <th class="col-md-3">Klasse</th>
+                    <th class="col-md-3">Geslacht</th>
+                </tr>
+            </thead>
+            @foreach (Baan b in Model.GetBanen())
+            {
+                <tbody>
+                    <tr>
+                        <td>@b.BaanId</td>
+                        @if (b.Schutter != null)
+                        {
+                            <td>@b.Schutter.Naam</td>
+                            <td>@b.Schutter.Discipline</td>
+                            <td>@b.Schutter.Klasse</td>
+                            <td>@b.Schutter.Geslacht</td>
+                        }
+                        else
+                        {
+                            <td>Geen schutter</td>
+                            <td>---</td>
+                            <td>---</td>
+                            <td>---</td>
+                            <td>@Html.ActionLink("Add", "AddSchutter", new { id = b.Id })</td>
+                        }
+                    </tr>
+                </tbody>
+            }
+
+        </table>
+    </div>
+</div>
+<p>
+    <br />
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

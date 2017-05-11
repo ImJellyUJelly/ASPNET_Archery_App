@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9794E88F-63E1-4010-92BD-123BB70EF0CE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Logics</RootNamespace>
+    <AssemblyName>Logics</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.cs" />
+    <Compile Include="Classes\Baan.cs" />
+    <Compile Include="Classes\Database\Interfaces\Connectie.cs" />
+    <Compile Include="Classes\Database\Interfaces\IBaanServices.cs" />
+    <Compile Include="Classes\Database\Interfaces\ISchutterServices.cs" />
+    <Compile Include="Classes\Database\Interfaces\IWedstrijdServices.cs" />
+    <Compile Include="Classes\Database\Repositories\BaanRepository.cs" />
+    <Compile Include="Classes\Database\Repositories\SchutterRepository.cs" />
+    <Compile Include="Classes\Database\Repositories\WedstrijdRepository.cs" />
+    <Compile Include="Classes\Database\SQL\MysqlBaanLogic.cs" />
+    <Compile Include="Classes\Database\SQL\MysqlSchutterLogic.cs" />
+    <Compile Include="Classes\Database\SQL\MysqlWedstrijdLogic.cs" />
+    <Compile Include="Classes\Enums\Discipline.cs" />
+    <Compile Include="Classes\Enums\Geslacht.cs" />
+    <Compile Include="Classes\Enums\Klasse.cs" />
+    <Compile Include="Classes\Enums\Soort.cs" />
+    <Compile Include="Classes\Schutter.cs" />
+    <Compile Include="Classes\Score.cs" />
+    <Compile Include="Classes\Scoreformulier.cs" />
+    <Compile Include="Classes\Vereniging.cs" />
+    <Compile Include="Classes\Wedstrijd.cs" />
+    <Compile Include="Exceptions\LoadFileException.cs" />
+    <Compile Include="Exceptions\NormalException.cs" />
+    <Compile Include="Exceptions\SchutterException.cs" />
+    <Compile Include="Exceptions\ScoreException.cs" />
+    <Compile Include="Exceptions\WedstrijdException.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
