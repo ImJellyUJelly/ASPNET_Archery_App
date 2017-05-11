@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graphical_User_Interface", "..\..\..\..\Documents\Visual Studio 2015\Projects\ASPNET_Archery_Application\ASPNET_Archery_Application\Graphical_User_Interface.csproj", "{92101ECC-0D9D-419F-93AD-80C88D175C5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logics", "..\..\..\..\Documents\Visual Studio 2015\Projects\ASPNET_Archery_Application\Logics\Logics.csproj", "{9794E88F-63E1-4010-92BD-123BB70EF0CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Storage", "..\..\..\..\Documents\Visual Studio 2015\Projects\ASPNET_Archery_Application\Storage\Storage.csproj", "{720105E7-5667-436D-8CD0-2358335BC350}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{92101ECC-0D9D-419F-93AD-80C88D175C5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92101ECC-0D9D-419F-93AD-80C88D175C5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92101ECC-0D9D-419F-93AD-80C88D175C5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92101ECC-0D9D-419F-93AD-80C88D175C5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9794E88F-63E1-4010-92BD-123BB70EF0CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9794E88F-63E1-4010-92BD-123BB70EF0CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9794E88F-63E1-4010-92BD-123BB70EF0CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9794E88F-63E1-4010-92BD-123BB70EF0CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{720105E7-5667-436D-8CD0-2358335BC350}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{720105E7-5667-436D-8CD0-2358335BC350}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{720105E7-5667-436D-8CD0-2358335BC350}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{720105E7-5667-436D-8CD0-2358335BC350}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
