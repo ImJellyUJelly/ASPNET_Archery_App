@@ -57,6 +57,11 @@ namespace ArcheryApplication.Classes.Database.Repositories
             _wedstrijdLogic.RemoveBanenFromWedstrijd(wedstrijd, baanid);
         }
 
+        public void RemoveSchutterFromWedstrijd(int wedId, int schutterId)
+        {
+            _wedstrijdLogic.RemoveSchutterFromWedstrijd(wedId, schutterId);
+        }
+
         public void RemoveWedstrijd(Wedstrijd wedstrijd)
         {
             _wedstrijdLogic.RemoveWedstrijd(wedstrijd);

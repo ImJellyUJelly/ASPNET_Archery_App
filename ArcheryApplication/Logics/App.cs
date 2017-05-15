@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using ArcheryApplication.Classes;
 using ArcheryApplication.Classes.Enums;
 using ArcheryApplication.Classes.Database.Repositories;
@@ -55,7 +56,7 @@ namespace ArcheryApplication
 
         public void AddWedstrijd(string naam, string date, string wedsoort)
         {
-            Soort soort = (Soort) Enum.Parse(typeof(Soort), wedsoort);
+            Soort soort = (Soort)Enum.Parse(typeof(Soort), wedsoort);
             Wedstrijd wedstrijd = new Wedstrijd(naam, soort, date, 1034);
             wedstrijdrepo.AddWedstrijd(wedstrijd);
             wedstrijdrepo.GetWedstrijdByName(wedstrijd.Naam).LaadBanen();
@@ -96,9 +97,26 @@ namespace ArcheryApplication
                 {
                     if (w.Datum == date)
                     {
-                        foreach(Baan b in w.GetBanen())
-                        wedstrijdrepo.RemoveBanenFromWedstrijd(w, b.Id);
-                        wedstrijdrepo.RemoveWedstrijd(w);
+                        try
+                        {
+                            foreach (Schutter s in w.GetSchutters())
+                            {
+                                wedstrijdrepo.RemoveSchutterFromWedstrijd(w.Id, s.Id);
+                            }
+                            foreach (Baan b in w.GetBanen())
+                            {
+                                // Hier ergens zit de error.
+                                wedstrijdrepo.RemoveBanenFromWedstrijd(w, b.Id);
+                            }
+                            if (w.GetBanenFromDB().Count == 0)
+                            {
+                                wedstrijdrepo.RemoveWedstrijd(w);
+                            }
+                        }
+                        catch (DataException dex)
+                        {
+                            throw new DataException("Alle wedstrijdbanen moeten verwijderd zijn voordat de wedstrijd verwijderd kan worden. Error: " + dex.Message);
+                        }
                     }
                 }
             }

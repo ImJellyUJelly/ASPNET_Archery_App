@@ -101,10 +101,17 @@ namespace ASPNET_Archery_Application.Controllers
 
         public ActionResult Delete(int id)
         {
-            Wedstrijd wedstrijd = app.GetWedstrijdById(id);
-            app.VerwijderWedstrijd(wedstrijd.Naam, wedstrijd.Datum);
+            try
+            {
+                Wedstrijd wedstrijd = app.GetWedstrijdById(id);
+                app.VerwijderWedstrijd(wedstrijd.Naam, wedstrijd.Datum);
 
-            return RedirectToAction("Index");
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return HttpNotFound(ex.Message);
+            }
         }
     }
 }

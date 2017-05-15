@@ -151,9 +151,14 @@ namespace ArcheryApplication.Classes
             return _schutters;
         }
 
-        private List<Schutter> GetSChuttersFromDB()
+        private List<Schutter> GetSchuttersFromDB()
         {
             return wedstrijdrepo.GetWedstrijdSchutters(this);
+        }
+
+        public List<Baan> GetBanenFromDB()
+        {
+            return banenrepo.ListBanen(Vereniging.VerNr);
         }
 
         public List<Baan> GetBanen()

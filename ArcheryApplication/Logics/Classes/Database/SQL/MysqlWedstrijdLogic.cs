@@ -569,5 +569,36 @@ namespace ArcheryApplication.Classes.Database.SQL
             }
             return null;
         }
+
+        public void RemoveSchutterFromWedstrijd(int wedId, int schutterId)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(_connectie))
+                {
+                    if (conn.State != ConnectionState.Open)
+                    {
+                        conn.Open();
+
+                        using (MySqlCommand cmd = new MySqlCommand())
+                        {
+                            cmd.CommandText =
+                                "DELETE FROM Registratie WHERE RegWedID = @wedId AND RegSchutterID = @schutId;";
+
+                            cmd.Parameters.AddWithValue("@wedId", wedId);
+                            cmd.Parameters.AddWithValue("@schutId", schutterId);
+                            cmd.Connection = conn;
+
+                            cmd.ExecuteNonQuery();
+
+                        }
+                    }
+                }
+            }
+            catch (DataException dex)
+            {
+                throw new DataException(dex.Message);
+            }
+        }
     }
 }
