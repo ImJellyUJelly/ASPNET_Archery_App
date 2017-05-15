@@ -5,24 +5,24 @@ namespace ArcheryApplication.Classes
     public class Schutter
     {
         public int Id { get; private set; }
-        public int Bondsnummer { get; private set; }
-        public string Naam { get; private set; }
-        public DateTime Geboortedatum { get; private set; }
-        public string EmailAdres { get; private set; }
+        public int Bondsnummer { get;  set; }
+        public string Naam { get;  set; }
+        public DateTime Geboortedatum { get;  set; }
+        public string Emailadres { get;  set; }
         public Baan Baan { get; private set; }
-        public Klasse Klasse { get; private set; }
-        public Discipline Discipline { get; private set; }
-        public Geslacht Geslacht { get; private set; }
-        public string Opmerking { get; private set; }
+        public Klasse Klasse { get;  set; }
+        public Discipline Discipline { get;  set; }
+        public Geslacht Geslacht { get;  set; }
+        public string Opmerking { get;  set; }
         public Scoreformulier ScoreFormulier { get; private set; }
-        public Vereniging Vereniging { get; private set; }
+        public Vereniging Vereniging { get;  set; }
 
         // Algemene constructor
         public Schutter(int bondsnr, string naam, string email, Klasse k, Discipline d, Geslacht g, DateTime geb, string opmerking)
         {
             Bondsnummer = bondsnr;
             Naam = naam;
-            EmailAdres = email;
+            Emailadres = email;
             Klasse = k;
             Discipline = d;
             Geslacht = g;

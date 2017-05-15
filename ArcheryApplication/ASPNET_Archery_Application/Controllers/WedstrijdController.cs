@@ -4,6 +4,7 @@ using ArcheryApplication;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using ArcheryApplication.Classes;
 
 namespace ASPNET_Archery_Application.Controllers
 {
@@ -35,6 +36,11 @@ namespace ASPNET_Archery_Application.Controllers
         {
             try
             {
+                string naam = form["Naam"];
+                string soort = form["Soort"];
+                string datum = form["Datum"];
+                
+                app.AddWedstrijd(naam, datum, soort);
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -86,6 +92,19 @@ namespace ASPNET_Archery_Application.Controllers
             {
                 return HttpNotFound(ex.Message);
             }
+        }
+
+        public ActionResult EditSchutter(int id)
+        {
+            return View();
+        }
+
+        public ActionResult Delete(int id)
+        {
+            Wedstrijd wedstrijd = app.GetWedstrijdById(id);
+            app.VerwijderWedstrijd(wedstrijd.Naam, wedstrijd.Datum);
+
+            return RedirectToAction("Index");
         }
     }
 }

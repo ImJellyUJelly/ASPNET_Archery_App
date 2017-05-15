@@ -16,7 +16,7 @@ namespace ArcheryApplication.Classes.Database.Interfaces
         List<Schutter> GetWedstrijdSchutters(Wedstrijd wedstrijd);
         void AddBaanToWedstrijd(Baan baan, int wedstrijdId);
         void EditBaanFromWedstrijd(Baan baan, int wedstrijdId);
-        void RemoveBaanFromWedstrijd(Baan baan, int wedstrijdId);
+        void RemoveBanenFromWedstrijd(Wedstrijd wedstrijd, int baanid);
         Vereniging GetVerenigingById(int verNr);
     }
 }

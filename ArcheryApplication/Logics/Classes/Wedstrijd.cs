@@ -24,15 +24,15 @@ namespace ArcheryApplication.Classes
             Naam = naam;
             Soort = soort;
             Datum = datum;
-            Vereniging = wedstrijdrepo.GetVerenigingById(1034);
+            Vereniging = vereniging;
             LaadBanen();
         }
-        public Wedstrijd(string naam, Soort soort, string datum)
+        public Wedstrijd(string naam, Soort soort, string datum, int vereniging)
         {
             Naam = naam;
             Soort = soort;
             Datum = datum;
-            Vereniging = wedstrijdrepo.GetVerenigingById(1034);
+            Vereniging = wedstrijdrepo.GetVerenigingById(vereniging);
             LaadBanen();
         }
 

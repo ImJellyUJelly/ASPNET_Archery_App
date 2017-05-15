@@ -43,6 +43,16 @@
             @Html.DisplayFor(model => model.Vereniging.Naam)
         </dd>
     </dl>
+    <hr/>
+    <p>
+        <div class="text-warning">
+            @Html.ActionLink("Terug naar wedstrijdenoverzicht", "Index") |
+            @Html.ActionLink("Bewerk wedstrijd", "Edit", new {id = Model.Id}) |
+            @Html.ActionLink("Verwijder wedstrijd", "Delete", new {id = Model.Id})
+        </div>
+
+    </p>
+    <hr/>
     <div class="dl-horizontal">
         <table data-role="table" data-mode="columntoggle" class="table-bordered">
             <thead>
@@ -65,6 +75,7 @@
                             <td>@b.Schutter.Discipline</td>
                             <td>@b.Schutter.Klasse</td>
                             <td>@b.Schutter.Geslacht</td>
+                            <td>@Html.ActionLink("Edit", "EditSchutter", new { id = b.Id })</td>
                         }
                         else
                         {
@@ -81,8 +92,3 @@
         </table>
     </div>
 </div>
-<p>
-    <br />
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

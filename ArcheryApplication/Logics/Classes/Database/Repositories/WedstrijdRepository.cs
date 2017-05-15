@@ -52,9 +52,9 @@ namespace ArcheryApplication.Classes.Database.Repositories
             return _wedstrijdLogic.ListWedstrijden();
         }
 
-        public void RemoveBaanFromWedstrijd(Baan baan, int wedstrijdId)
+        public void RemoveBanenFromWedstrijd(Wedstrijd wedstrijd, int baanid)
         {
-            _wedstrijdLogic.RemoveBaanFromWedstrijd(baan, wedstrijdId);
+            _wedstrijdLogic.RemoveBanenFromWedstrijd(wedstrijd, baanid);
         }
 
         public void RemoveWedstrijd(Wedstrijd wedstrijd)

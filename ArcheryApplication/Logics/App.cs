@@ -56,7 +56,7 @@ namespace ArcheryApplication
         public void AddWedstrijd(string naam, string date, string wedsoort)
         {
             Soort soort = (Soort) Enum.Parse(typeof(Soort), wedsoort);
-            Wedstrijd wedstrijd = new Wedstrijd(naam, soort, date);
+            Wedstrijd wedstrijd = new Wedstrijd(naam, soort, date, 1034);
             wedstrijdrepo.AddWedstrijd(wedstrijd);
             wedstrijdrepo.GetWedstrijdByName(wedstrijd.Naam).LaadBanen();
         }
@@ -96,6 +96,8 @@ namespace ArcheryApplication
                 {
                     if (w.Datum == date)
                     {
+                        foreach(Baan b in w.GetBanen())
+                        wedstrijdrepo.RemoveBanenFromWedstrijd(w, b.Id);
                         wedstrijdrepo.RemoveWedstrijd(w);
                     }
                 }

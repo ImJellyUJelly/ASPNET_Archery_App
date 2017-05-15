@@ -299,9 +299,35 @@ namespace ArcheryApplication.Classes.Database.SQL
             }
         }
 
-        public void RemoveBaanFromWedstrijd(Baan baan, int wedstrijdId)
+        public void RemoveBanenFromWedstrijd(Wedstrijd wedstrijd, int baanid)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(_connectie))
+                {
+                    if (conn.State != ConnectionState.Open)
+                    {
+                        conn.Open();
+
+                        using (MySqlCommand cmd = new MySqlCommand())
+                        {
+                            cmd.CommandText =
+                                "DELETE FROM baanindeling WHERE BaIndelWedID = @wedstrijdId AND BaIndelBaanID = @baanId;";
+
+                            cmd.Parameters.AddWithValue("@wedstrijdId", wedstrijd.Id);
+                            cmd.Parameters.AddWithValue("@baanId", baanid);
+                            cmd.Connection = conn;
+
+                            cmd.ExecuteNonQuery();
+
+                        }
+                    }
+                }
+            }
+            catch (DataException dex)
+            {
+                throw new DataException(dex.Message);
+            }
         }
 
         public void RemoveWedstrijd(Wedstrijd wedstrijd)
@@ -364,7 +390,7 @@ namespace ArcheryApplication.Classes.Database.SQL
                                               "LEFT JOIN Schutter S ON S.SchutID = baanindel.BaIndelSchutID " +
                                               "LEFT JOIN Klasse K ON K.KlasseID = S.SchutKlasseID " +
                                               "LEFT JOIN Registratie reg ON reg.RegSchutterID = S.SchutID " +
-                                              "WHERE WedID = 1;";
+                                              "WHERE BaIndelWedID = @wedId;";
 
                             cmd.Parameters.AddWithValue("@wedId", wedstrijd.Id);
                             cmd.Connection = conn;
@@ -387,29 +413,55 @@ namespace ArcheryApplication.Classes.Database.SQL
                                         afstand = 0;
                                     }
                                     int schutid;
+                                    int schutbondsnr;
+                                    string schutnaam;
+                                    Discipline discipline;
+                                    Geslacht _geslacht;
+                                    string email;
+                                    DateTime gebdatum;
+                                    string opmerking;
+                                    Klasse klasse;
+                                    Vereniging vereniging;
+                                    Schutter schutter = null;
                                     if (!reader.IsDBNull(5))
                                     {
                                         schutid = reader.GetInt32(5);
-                                    }
-                                    else
-                                    {
-                                        schutid = -1;
-                                        Schutter geenSchutter = null;
-                                    }
-                                    int schutbondsnr = reader.GetInt32(6);
-                                    string schutnaam = reader.GetString(7);
-                                    Discipline discipline = (Discipline)Enum.Parse(typeof(Discipline), reader.GetString(8));
-                                    Geslacht geslacht = (Geslacht)Enum.Parse(typeof(Geslacht), reader.GetString(9));
-                                    string email = reader.GetString(10);
-                                    DateTime gebdatum = DateTime.Parse(reader.GetString(11));
-                                    string opmerking = reader.GetString(12);
-                                    Klasse klasse = (Klasse) Enum.Parse(typeof(Klasse), reader.GetString(13));
-                                    Vereniging vereniging = wedstrijd.Vereniging;
+                                        schutbondsnr = reader.GetInt32(6);
+                                        schutnaam = reader.GetString(7);
+                                        discipline = (Discipline)Enum.Parse(typeof(Discipline), reader.GetString(8));
+                                        string geslacht = reader.GetString(9);
+                                        if (geslacht == "M")
+                                        {
+                                            _geslacht = Geslacht.Heren;
+                                        }
+                                        else if (geslacht == "D")
+                                        {
+                                            _geslacht = Geslacht.Dames;
+                                        }
+                                        else // Default
+                                        {
+                                            _geslacht = Geslacht.Heren;
+                                        }
+                                        email = reader.GetString(10);
+                                        gebdatum = DateTime.Parse(reader.GetString(11));
+                                        if (!reader.IsDBNull(12))
+                                        {
+                                            opmerking = reader.GetString(12);
+                                        }
+                                        else
+                                        {
+                                            opmerking = "";
+                                        }
+                                        klasse = (Klasse)Enum.Parse(typeof(Klasse), reader.GetString(13));
+                                        vereniging = wedstrijd.Vereniging;
 
-                                    Schutter schutter = new Schutter(schutid, schutbondsnr, schutnaam, email, klasse, discipline, geslacht, gebdatum, opmerking, vereniging);
+                                        schutter = new Schutter(schutid, schutbondsnr, schutnaam, email, klasse, discipline, _geslacht, gebdatum, opmerking, vereniging);
+                                    }
                                     Baan baan = new Baan(baanId, baanNr, baanLetter, afstand, wedstrijd);
-
-                                    baan.VoegSchutterToe(schutter);
+                                    if (schutter != null)
+                                    {
+                                        baan.VoegSchutterToe(schutter);
+                                    }
                                     banen.Add(baan);
                                 }
                                 if (banen.Count >= 1)

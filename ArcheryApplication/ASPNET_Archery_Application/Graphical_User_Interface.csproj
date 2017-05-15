@@ -283,9 +283,11 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Wedstrijd\Index.cshtml" />
-    <Content Include="Views\Wedstrijd\Create.cshtml" />
     <Content Include="Views\Wedstrijd\Edit.cshtml" />
     <Content Include="Views\Wedstrijd\Details.cshtml" />
+    <Content Include="Views\Wedstrijd\EditSchutter.cshtml" />
+    <Content Include="Views\Wedstrijd\Create.cshtml" />
+    <Content Include="Views\Wedstrijd\AddSchutter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
