@@ -24,25 +24,16 @@ namespace ArcheryApplication.Classes.Database.SQL
 
                         using (MySqlCommand cmd = new MySqlCommand())
                         {
-                            try
-                            {
-                                cmd.CommandText = "INSERT INTO Baanindeling (BaIndelBaanId, BaIndelWedID, Afstand) VALUES (@baindelbaanid, @baindelwedid, @afstand);";
+                            cmd.CommandText = "INSERT INTO Baanindeling (BaIndelBaanId, BaIndelWedID, Afstand) VALUES (@baindelbaanid, @baindelwedid, @afstand);";
 
-                                cmd.Parameters.AddWithValue("@baindelbaanid", baan.Id);
-                                cmd.Parameters.AddWithValue("@baindelwedid", wedstrijdId);
-                                cmd.Parameters.AddWithValue("@afstand", baan.Afstand);
+                            cmd.Parameters.AddWithValue("@baindelbaanid", baan.Id);
+                            cmd.Parameters.AddWithValue("@baindelwedid", wedstrijdId);
+                            cmd.Parameters.AddWithValue("@afstand", baan.Afstand);
 
-                                cmd.Connection = conn;
-                                cmd.ExecuteNonQuery();
-                            }
-                            catch (Exception ex)
-                            {
-                                throw new DataException(ex.Message);
-                            }
-                            finally
-                            {
-                                conn.Close();
-                            }
+                            cmd.Connection = conn;
+                            cmd.ExecuteNonQuery();
+
+                            conn.Close();
                         }
                     }
                 }
@@ -65,34 +56,25 @@ namespace ArcheryApplication.Classes.Database.SQL
 
                         using (MySqlCommand cmd = new MySqlCommand())
                         {
-                            try
-                            {
-                                cmd.CommandText = "INSERT INTO Wedstrijd (WedNaam, WedSoort, WedDatum, WedVerNr) VALUES (@wednaam, @wedsoort, @weddatum, @wedvernr)";
 
-                                cmd.Parameters.AddWithValue("@wednaam", wedstrijd.Naam);
-                                cmd.Parameters.AddWithValue("@wedsoort", wedstrijd.Soort);
-                                cmd.Parameters.AddWithValue("@weddatum", wedstrijd.Datum);
-                                if (wedstrijd.Vereniging != null)
-                                {
-                                    cmd.Parameters.AddWithValue("@wedvernr", wedstrijd.Vereniging.VerNr);
-                                }
-                                else
-                                {
-                                    cmd.Parameters.AddWithValue("@wedvernr", 1034);
-                                }
+                            cmd.CommandText = "INSERT INTO Wedstrijd (WedNaam, WedSoort, WedDatum, WedVerNr) VALUES (@wednaam, @wedsoort, @weddatum, @wedvernr)";
 
-                                cmd.Connection = conn;
+                            cmd.Parameters.AddWithValue("@wednaam", wedstrijd.Naam);
+                            cmd.Parameters.AddWithValue("@wedsoort", wedstrijd.Soort);
+                            cmd.Parameters.AddWithValue("@weddatum", wedstrijd.Datum);
+                            if (wedstrijd.Vereniging != null)
+                            {
+                                cmd.Parameters.AddWithValue("@wedvernr", wedstrijd.Vereniging.VerNr);
+                            }
+                            else
+                            {
+                                cmd.Parameters.AddWithValue("@wedvernr", 1034);
+                            }
 
-                                cmd.ExecuteNonQuery();
-                            }
-                            catch (Exception ex)
-                            {
-                                throw new DataException(ex.Message);
-                            }
-                            finally
-                            {
-                                conn.Close();
-                            }
+                            cmd.Connection = conn;
+
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
                         }
                     }
                 }
@@ -245,48 +227,37 @@ namespace ArcheryApplication.Classes.Database.SQL
 
                         using (MySqlCommand cmd = new MySqlCommand())
                         {
-                            try
+                            cmd.CommandText =
+                                    "SELECT WedID, WedNaam, WedSoort, WedDatum, VerNr, VerNaam, VerStraatNaam, VerHuisNr, VerPostcode, VerStad " +
+                                    "FROM Wedstrijd Wed LEFT JOIN Vereniging Ver ON Ver.VerNr = Wed.WedVerNr;";
+                            cmd.Connection = conn;
+
+                            using (MySqlDataReader reader = cmd.ExecuteReader())
                             {
-                                cmd.CommandText =
-                                        "SELECT WedID, WedNaam, WedSoort, WedDatum, VerNr, VerNaam, VerStraatNaam, VerHuisNr, VerPostcode, VerStad " +
-                                        "FROM Wedstrijd Wed LEFT JOIN Vereniging Ver ON Ver.VerNr = Wed.WedVerNr;";
-                                cmd.Connection = conn;
-
-
-                                using (MySqlDataReader reader = cmd.ExecuteReader())
+                                while (reader.Read())
                                 {
-                                    while (reader.Read())
+                                    int id = reader.GetInt32(0);
+                                    string naam;
+                                    // Volgens mij hoeft dit niet eens, naam is namelijk verplicht.
+                                    if (!reader.IsDBNull(1))
                                     {
-                                        int id = reader.GetInt32(0);
-                                        string naam;
-                                        // Volgens mij hoeft dit niet eens, naam is namelijk verplicht.
-                                        if (!reader.IsDBNull(1))
-                                        {
-                                            naam = reader.GetString(1);
-                                        }
-                                        else
-                                        {
-                                            naam = "Geen naam";
-                                        }
-                                        Soort soort = (Soort)Enum.Parse(typeof(Soort), reader.GetString(2));
-                                        string datum = reader.GetString(3);
-                                        int verNr = reader.GetInt32(4);
-                                        // Vereniging
-
-                                        Vereniging vereniging = GetVerenigingById(verNr);
-
-                                        wedstrijden.Add(new Wedstrijd(id, naam, soort, datum, vereniging));
+                                        naam = reader.GetString(1);
                                     }
-                                    return wedstrijden;
+                                    else
+                                    {
+                                        naam = "Geen naam";
+                                    }
+                                    Soort soort = (Soort)Enum.Parse(typeof(Soort), reader.GetString(2));
+                                    string datum = reader.GetString(3);
+                                    int verNr = reader.GetInt32(4);
+                                    // Vereniging
+
+                                    Vereniging vereniging = GetVerenigingById(verNr);
+
+                                    wedstrijden.Add(new Wedstrijd(id, naam, soort, datum, vereniging));
                                 }
-                            }
-                            catch (Exception ex)
-                            {
-                                throw new DataException(ex.Message);
-                            }
-                            finally
-                            {
                                 conn.Close();
+                                return wedstrijden;
                             }
                         }
                     }
