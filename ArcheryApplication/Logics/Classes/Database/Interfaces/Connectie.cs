@@ -8,7 +8,7 @@ namespace ArcheryApplication.Classes.Database.Interfaces
 {
     public class Connectie
     {
-        public string ConnectieString { get; private set; }
+        public string ConnectieString;
 
         public Connectie()
         {
@@ -18,6 +18,11 @@ namespace ArcheryApplication.Classes.Database.Interfaces
         public void SetConnectieString(string nieuweString)
         {
             ConnectieString = nieuweString;
+        }
+
+        public string GetConnectieString()
+        {
+            return ConnectieString;
         }
     }
 }

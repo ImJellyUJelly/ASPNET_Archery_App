@@ -14,7 +14,9 @@ namespace ArcheryApplication
         /// Dit is de facade. De GUI krijgt alleen wat in deze class gecodeerd staat.
         /// </summary>
         private WedstrijdRepository wedstrijdrepo = new WedstrijdRepository(new MysqlWedstrijdLogic());
-
+        private BaanRepository baanrepo = new BaanRepository(new MysqlBaanLogic());
+        private SchutterRepository schutterrepo = new SchutterRepository(new MysqlSchutterLogic());
+        private VerenigingRepository verenigingrepo = new VerenigingRepository(new MysqlVerenigingLogic());
         private List<Wedstrijd> _wedstrijden;
 
         public App()
@@ -62,12 +64,12 @@ namespace ArcheryApplication
             return wedstrijdrepo.GetSchutterById(wedid, bondsnr, naam);
         }
 
-        public Schutter GetSchutterByBondsNrEnNaam(int wedId, int bondsnr, string naam)
+        public Schutter GetSchutterByBondsNrEnNaam(int bondsnr, string naam)
         {
-            return wedstrijdrepo.GetSchutterByNameAndBondsNr(wedId, bondsnr, naam);
+            return schutterrepo.GetSchutterByNameAndBondsNr(bondsnr, naam);
         }
 
-    public void AddWedstrijd(string naam, string date, string wedsoort)
+        public void AddWedstrijd(string naam, string date, string wedsoort)
         {
             Soort soort = (Soort)Enum.Parse(typeof(Soort), wedsoort);
             Wedstrijd wedstrijd = new Wedstrijd(naam, soort, date, 1034);
@@ -164,6 +166,11 @@ namespace ArcheryApplication
             return wedstrijdrepo.GetSchutterById(wedstrijdId, bondsnummer, naam);
         }
 
+        public Schutter GetSchutterById(int schutterId)
+        {
+            return schutterrepo.GetSchutterById(schutterId);
+        }
+
         /// <summary>
         /// Voegt een schutter toe aan een wedstrijd.
         /// </summary>
@@ -175,15 +182,29 @@ namespace ArcheryApplication
         /// <param name="discipline"> Soort boog waarmee geschoten wordt: recurve, compound, barebow of crossbow </param>
         /// <param name="klasse"> Klasse waarin geschoten wordt: aspiranten, cadetten, junioren, senioren, veteranen </param>
         /// <param name="opmerking"> Als de schutter een handicap heeft, of wat er ook te melden moet zijn voor de wedstrijd </param>
-        public void SchutterAanmelden(int wedstrijdId, int bondsnummer, string naam, string geboortedatum, string geslacht, string discipline, string klasse, string opmerking)
+        public void SchutterAanmelden(int bondsnummer, string naam, string email, string geboortedatum, string geslacht, string discipline, string klasse, string opmerking, string vernaam)
         {
-            throw new NotImplementedException();
+            try
+            {
+                DateTime gebdatum = DateTime.Parse(geboortedatum);
+                Klasse _klasse = (Klasse)Enum.Parse(typeof(Klasse), klasse);
+                Geslacht _geslacht = (Geslacht)Enum.Parse(typeof(Geslacht), geslacht);
+                Discipline _discipline = (Discipline)Enum.Parse(typeof(Discipline), discipline);
+
+                Schutter schutter = new Schutter(bondsnummer, naam, email, _klasse, _discipline, _geslacht, gebdatum, opmerking);
+                schutter.SetVereniging(verenigingrepo.GetVerenigingByName(vernaam));
+                schutterrepo.AddSchutter(schutter);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
-        public void GeefSchutterEenClub(int wedid, int bondsnr, string naam, int vernr)
+        public void GeefSchutterEenClub(int wedid, int bondsnr, string naam)
         {
-            Schutter schutter = wedstrijdrepo.GetSchutterByNameAndBondsNr(wedid, bondsnr, naam);
-            Vereniging vereniging = wedstrijdrepo.GetVerenigingById(vernr);
+            Schutter schutter = schutterrepo.GetSchutterByNameAndBondsNr(bondsnr, naam);
+            Vereniging vereniging = wedstrijdrepo.GetVerenigingById(1034);
 
             schutter.SetVereniging(vereniging);
         }
@@ -232,9 +253,9 @@ namespace ArcheryApplication
         /// <param name="baanId"> Het ID van een baan </param>
         /// <param name="wedstrijdId"> Het ID van een wedstrijd </param>
         /// <param name="schutterId"> Het ID van een schutter </param>
-        public void VoegSchutterToeAanBaan(int baanId, int wedstrijdId, int schutterId)
+        public void VoegSchutterToeAanBaan(int baanId, int wedstrijdId, int schutterId, int afstand)
         {
-            wedstrijdrepo.AddSchutterToBaan(wedstrijdId, schutterId, baanId);
+            wedstrijdrepo.AddSchutterToBaan(wedstrijdId, schutterId, baanId, afstand);
         }
 
         /// <summary>
@@ -243,19 +264,24 @@ namespace ArcheryApplication
         /// <param name="baanId"> Het ID van een baan </param>
         /// <param name="wedstrijdId"> Het ID van een wedstrijd </param>
         /// <param name="schutterId"> Het ID van een schutter </param>
-        public void VerwijderSchutterVanBaaN(int baanId, int wedstrijdId, int schutterId)
+        public void VerwijderSchutterVanBaan(int baanId, int wedstrijdId, int schutterId)
         {
-            throw new NotImplementedException();
+            wedstrijdrepo.VerwijderSchutterVanBaan(baanId, wedstrijdId, schutterId);
+        }
+
+        public Baan GetWedstrijdBaanById(int id, int wedId)
+        {
+            return baanrepo.GetBaanIdFromWedstrijd(id, wedId);
         }
 
         public void RegistreerSchutterOpWedstrijd(int wedId, int schutterId, string discipline)
         {
-            throw new NotImplementedException();
+            wedstrijdrepo.SubscribeSchutterVoorWedstrijd(wedId, schutterId, discipline);
         }
 
         public void UnregistreerSchutterVanWedstrijd(int wedId, int schutterId)
         {
-            throw new NotImplementedException();
+            wedstrijdrepo.UnsubscribeSchutterVoorWedstrijd(wedId, schutterId);
         }
 
         #endregion

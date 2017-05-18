@@ -10,7 +10,7 @@ namespace ArcheryApplication.Classes.Database.Repositories
 
         public WedstrijdRepository(IWedstrijdServices wedstrijdLogic)
         {
-            this._wedstrijdLogic = wedstrijdLogic;
+            _wedstrijdLogic = wedstrijdLogic;
         }
 
         public void AddBaanToWedstrijd(Baan baan, int wedstrijdId)
@@ -53,12 +53,7 @@ namespace ArcheryApplication.Classes.Database.Repositories
             return _wedstrijdLogic.GetSchutterById(wedid, bondsnr, naam);
         }
 
-        public Schutter GetSchutterByNameAndBondsNr(int wedId, int bondsnr, string naam)
-        {
-            return _wedstrijdLogic.GetSchutterByNameAndBondsNr(wedId, bondsnr, naam);
-        }
-
-    public List<Wedstrijd> ListWedstrijden()
+        public List<Wedstrijd> ListWedstrijden()
         {
             return _wedstrijdLogic.ListWedstrijden();
         }
@@ -98,9 +93,9 @@ namespace ArcheryApplication.Classes.Database.Repositories
             return _wedstrijdLogic.GetWedstrijdBanen(wedstrijd);
         }
 
-        public void AddSchutterToBaan(int wedId, int schutterId, int baanId)
+        public void AddSchutterToBaan(int wedId, int schutterId, int baanId, int afstand)
         {
-            _wedstrijdLogic.AddSchutterToBaan(wedId, schutterId, baanId);
+            _wedstrijdLogic.AddSchutterToBaan(wedId, schutterId, baanId, afstand);
         }
 
         public void BewerkSchutterOpBaan(int wedId, int schutterId, int baanId)
@@ -115,12 +110,12 @@ namespace ArcheryApplication.Classes.Database.Repositories
 
         public void SubscribeSchutterVoorWedstrijd(int wedId, int schutterId, string discipline)
         {
-            throw new NotImplementedException();
+            _wedstrijdLogic.SubscribeSchutterVoorWedstrijd(wedId, schutterId, discipline);
         }
 
         public void UnsubscribeSchutterVoorWedstrijd(int wedId, int schutterId)
         {
-            throw new NotImplementedException();
+            _wedstrijdLogic.UnsubscribeSchutterVoorWedstrijd(wedId, schutterId);
         }
     }
 }

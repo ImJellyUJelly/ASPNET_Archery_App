@@ -3,6 +3,7 @@
     public enum Geslacht
     {
         Heren,
-        Dames
+        Dames,
+        Onzijdig
     }
 }

@@ -3,7 +3,7 @@ using ArcheryApplication.Classes.Database.Interfaces;
 
 namespace ArcheryApplication.Classes.Database.Repositories
 {
-    public class BaanRepository
+    public class BaanRepository : IBaanServices
     {
         private IBaanServices _baanLogic;
         public BaanRepository(IBaanServices baanLogic)
@@ -54,6 +54,11 @@ namespace ArcheryApplication.Classes.Database.Repositories
         public void RemoveSchutterFromBaan(Schutter schutter, int baanId)
         {
             _baanLogic.RemoveSchutterFromBaan(schutter, baanId);
+        }
+
+        public Baan GetBaanIdFromWedstrijd(int baanId, int wedId)
+        {
+            return _baanLogic.GetBaanIdFromWedstrijd(baanId, wedId);
         }
     }
 }

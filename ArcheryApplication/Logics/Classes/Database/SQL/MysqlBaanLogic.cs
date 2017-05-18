@@ -10,7 +10,7 @@ namespace ArcheryApplication.Classes.Database.SQL
     public class MysqlBaanLogic : IBaanServices
     {
         private readonly string _connectie = "Server = studmysql01.fhict.local;Uid=dbi299244;Database=dbi299244;Pwd=Geschiedenis1500;";
-
+        private MysqlWedstrijdLogic wedstrijdLogic = new MysqlWedstrijdLogic();
         public List<Baan> ListBanen(int VerNr)
         {
             try
@@ -40,7 +40,7 @@ namespace ArcheryApplication.Classes.Database.SQL
                                         int baannummer = reader.GetInt32(1);
                                         string baanletter = reader.GetString(2);
 
-                                        banen.Add(new Baan(baanid, baannummer, baanletter));
+                                        banen.Add(new Baan(baanid, baannummer, baanletter, 70));
                                     }
                                     return banen;
                                 }
@@ -102,6 +102,56 @@ namespace ArcheryApplication.Classes.Database.SQL
         public void RemoveSchutterFromBaan(Schutter schutter, int baanId)
         {
             throw new NotImplementedException();
+        }
+
+        public Baan GetBaanIdFromWedstrijd(int baanId, int wedId)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(_connectie))
+                {
+                    if (conn.State != ConnectionState.Open)
+                    {
+                        conn.Open();
+
+                        using (MySqlCommand cmd = new MySqlCommand())
+                        {
+                            cmd.CommandText =
+                                "SELECT BaanID, BaanNr, BaanLetter, Afstand, BaanVerNr, WedID, WedNaam " +
+                                "FROM Baanindeling BI " +
+                                "LEFT JOIN Baan B ON B.BaanID = BI.BaIndelBaanID " +
+                                "LEFT JOIN Wedstrijd W ON W.WedID = BI.BaIndelWedID " +
+                                "WHERE BaIndelBaanID = @baanId AND BaIndelWedID = @wedId;";
+
+                            cmd.Parameters.AddWithValue("@baanId", baanId);
+                            cmd.Parameters.AddWithValue("@wedId", wedId);
+
+                            cmd.Connection = conn;
+
+                            using (MySqlDataReader reader = cmd.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    int baanID = reader.GetInt32(0);
+                                    int baanNr = reader.GetInt32(1);
+                                    string baanLetter = reader.GetString(2);
+                                    int afstand = reader.GetInt32(3);
+                                    Vereniging vereniging = wedstrijdLogic.GetVerenigingById(reader.GetInt32(4));
+                                    Wedstrijd wedstrijd = wedstrijdLogic.GetWedstrijdById(reader.GetInt32(5));
+
+                                    Baan baan = new Baan(baanID, baanNr, baanLetter, afstand, wedstrijd, vereniging);
+                                    return baan;
+                                }
+                            }
+                        }
+                    }
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new DataException(ex.Message);
+            }
         }
     }
 }

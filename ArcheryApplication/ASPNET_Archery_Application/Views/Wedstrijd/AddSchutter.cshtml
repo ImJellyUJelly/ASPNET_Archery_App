@@ -12,6 +12,8 @@
 {
     @Html.AntiForgeryToken()
     
+    @Html.HiddenFor(model => model.Baan.Id)
+    @Html.HiddenFor(model => model.Baan.Wedstrijd.Id)
     <div class="form-horizontal">
         <h4>Schutter</h4>
         <hr />
@@ -77,11 +79,11 @@
             <div class="col-md-10">
                 <select class="form-control" name="Klasse">
                     <option selected disabled hidden>Kies...</option>
-                    <option name="Aspiranten">Aspiranten</option>
-                    <option name="Cadetten">Cadetten</option>
-                    <option name="Junioren">Junioren</option>
-                    <option name="Senioren">Senioren</option>
-                    <option name="Veteranen">Veteranen</option>
+                    <option name="Aspirant">Aspiran</option>
+                    <option name="Cadet">Cadet</option>
+                    <option name="Junior">Junior</option>
+                    <option name="Senior">Senior</option>
+                    <option name="Veteraan">Veteraan</option>
                 </select>
             </div>
         </div>
@@ -91,6 +93,14 @@
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Opmerking, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Opmerking, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.Vereniging.Naam, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Vereniging.Naam, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Vereniging.Naam, "", new { @class = "text-danger" })
             </div>
         </div>
 

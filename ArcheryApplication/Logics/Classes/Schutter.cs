@@ -46,6 +46,23 @@ namespace ArcheryApplication.Classes
             Vereniging = vereniging;
         }
 
+        public Schutter(int id, int bondsnummer, string schutnaam, string email, Klasse klasse, Geslacht geslacht, DateTime gebdatum, string opmerking, Vereniging vereniging)
+        {
+            Id = id;
+            Bondsnummer = bondsnummer;
+            Naam = schutnaam;
+            Emailadres = email;
+            Klasse = klasse;
+            Geslacht = geslacht;
+            Geboortedatum = gebdatum;
+            Opmerking = opmerking;
+            ScoreFormulier = new Scoreformulier();
+        }
+
+        public Schutter()
+        {
+        }
+
         public void EditSchutter(int bondsnr, string naam, Klasse k, Discipline d, Geslacht g, DateTime geb, string opmerking)
         {
             Bondsnummer = bondsnr;

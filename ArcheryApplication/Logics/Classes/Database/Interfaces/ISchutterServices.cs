@@ -6,6 +6,7 @@ namespace ArcheryApplication.Classes.Database.Interfaces
     {
         Schutter GetSchutterById(int schutterId);
         Schutter GetSchutterByBondsNr(int bondsnr);
+        Schutter GetSchutterByNameAndBondsNr(int bondsnr, string naam);
         List<Schutter> ListSchutters();
         void AddSchutter(Schutter schutter);
         void EditSchutter(Schutter schutter);

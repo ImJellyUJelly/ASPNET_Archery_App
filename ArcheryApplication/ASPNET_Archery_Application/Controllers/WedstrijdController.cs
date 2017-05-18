@@ -85,11 +85,14 @@ namespace ASPNET_Archery_Application.Controllers
             }
         }
         [HttpGet]
-        public ActionResult AddSchutter(int id)
+        public ActionResult AddSchutter(int id, int wedId)
         {
             try
             {
-                return View();
+                Baan baan = app.GetWedstrijdBaanById(id, wedId);
+                Schutter schutter = new Schutter();
+                schutter.GeefSchutterEenBaan(baan);
+                return View(schutter);
             }
             catch (Exception ex)
             {
@@ -101,32 +104,33 @@ namespace ASPNET_Archery_Application.Controllers
         {
             try
             {
-                int wedId = Convert.ToInt32(schutterCollection["WedId"]);
+                Baan baan = app.GetWedstrijdBaanById(Convert.ToInt32(schutterCollection["Baan.Id"]), Convert.ToInt32(schutterCollection["Baan.Wedstrijd.Id"]));
                 string naam = schutterCollection["Naam"];
                 int bondsnummer = Convert.ToInt32(schutterCollection["Bondsnummer"]);
                 Schutter schutter = null;
-                schutter = app.GetSchutterByBondsNrEnNaam(wedId, bondsnummer, naam);
+                schutter = app.GetSchutterByBondsNrEnNaam(bondsnummer, naam);
+                string discipline;
                 if (schutter == null)
                 {
-                    Klasse klasse = (Klasse)Enum.Parse(typeof(Klasse), schutterCollection["Klasse"]);
-                    Discipline discipline = (Discipline)Enum.Parse(typeof(Discipline), schutterCollection["Discipline"]);
-                    Geslacht geslacht = (Geslacht)Enum.Parse(typeof(Geslacht), schutterCollection["Geslacht"]);
+                    string klasse = schutterCollection["Klasse"];
+                    discipline = schutterCollection["Discipline"];
+                    string geslacht = schutterCollection["Geslacht"];
                     string email = schutterCollection["Emailadres"];
-                    DateTime geboortedatum = DateTime.Parse(schutterCollection["Geboortedatum"]);
+                    string geboortedatum = schutterCollection["Geboortedatum"];
                     string opmerking = schutterCollection["Opmerking"];
-                    int vereniging = 1034;
+                    string vereniging = schutterCollection["Vereniging.Naam"];
 
-                    schutter = new Schutter(bondsnummer, naam, email, klasse, discipline, geslacht, geboortedatum, opmerking);
-                    app.GeefSchutterEenClub(wedId, bondsnummer, naam, vereniging);
+                    app.SchutterAanmelden(bondsnummer, naam, email, geboortedatum, geslacht, discipline, klasse, opmerking, vereniging);
+                    //app.GeefSchutterEenClub(baan.Wedstrijd.Id, bondsnummer, naam);
                 }
-
-                if (schutterCollection["BaanId"] != null)
+                schutter = app.GetSchutterByBondsNrEnNaam(bondsnummer, naam);
+                app.RegistreerSchutterOpWedstrijd(baan.Wedstrijd.Id, schutter.Id, schutter.Discipline.ToString());
+                if (schutterCollection["Baan.Id"] != null)
                 {
-                    //app.VoegSchutterToeAanBaan(schutterCollection["BaanId"]);
+                    app.VoegSchutterToeAanBaan(baan.Id, baan.Wedstrijd.Id, schutter.Id, baan.Afstand);
                 }
 
-                //app.RegistreerSchutterOpWedstrijd(wedId, );
-                return View();
+                return RedirectToAction("Details", new {id = baan.Wedstrijd.Id});
             }
             catch (Exception ex)
             {
@@ -157,6 +161,14 @@ namespace ASPNET_Archery_Application.Controllers
             try
             {
                 Wedstrijd wedstrijd = app.GetWedstrijdById(id);
+                foreach (Baan b in wedstrijd.GetBanen())
+                {
+                    if (b.Schutter != null)
+                    {
+                        app.UnregistreerSchutterVanWedstrijd(wedstrijd.Id, b.Schutter.Id);
+                        app.VerwijderSchutterVanBaan(b.Id, wedstrijd.Id, b.Schutter.Id);
+                    }
+                }
                 app.VerwijderWedstrijd(wedstrijd.Naam, wedstrijd.Datum);
 
                 return RedirectToAction("Index");

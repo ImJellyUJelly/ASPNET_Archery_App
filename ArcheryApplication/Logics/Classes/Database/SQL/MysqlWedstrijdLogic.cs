@@ -169,48 +169,39 @@ namespace ArcheryApplication.Classes.Database.SQL
 
                         using (MySqlCommand cmd = new MySqlCommand())
                         {
-                            try
+
+                            cmd.CommandText =
+                                "SELECT WedID, WedNaam, WedSoort, WedDatum, VerNr " +
+                                "FROM Wedstrijd Wed LEFT JOIN Vereniging Ver ON Ver.VerNr = Wed.WedVerNr " +
+                                "WHERE WedID = @wedId;";
+
+                            cmd.Parameters.AddWithValue("@wedId", wedstrijdId);
+                            cmd.Connection = conn;
+
+                            using (MySqlDataReader reader = cmd.ExecuteReader())
                             {
-                                cmd.CommandText =
-                                    "SELECT WedID, WedNaam, WedSoort, WedDatum, VerNr " +
-                                    "FROM Wedstrijd Wed LEFT JOIN Vereniging Ver ON Ver.VerNr = Wed.WedVerNr " +
-                                    "WHERE WedID = @wedId;";
-
-                                cmd.Parameters.AddWithValue("@wedId", wedstrijdId);
-                                cmd.Connection = conn;
-
-                                using (MySqlDataReader reader = cmd.ExecuteReader())
+                                while (reader.Read())
                                 {
-                                    while (reader.Read())
-                                    {
-                                        int wedId = reader.GetInt32(0);
-                                        string wedNaam = reader.GetString(1);
-                                        Soort wedSoort = (Soort)Enum.Parse(typeof(Soort), reader.GetString(2));
-                                        string wedDatum = reader.GetString(3);
-                                        int verNr = reader.GetInt32(4);
+                                    int wedId = reader.GetInt32(0);
+                                    string wedNaam = reader.GetString(1);
+                                    Soort wedSoort = (Soort)Enum.Parse(typeof(Soort), reader.GetString(2));
+                                    string wedDatum = reader.GetString(3);
+                                    int verNr = reader.GetInt32(4);
 
-                                        Vereniging vereniging = GetVerenigingById(verNr);
+                                    Vereniging vereniging = GetVerenigingById(verNr);
 
-                                        return new Wedstrijd(wedId, wedNaam, wedSoort, wedDatum, vereniging);
-                                    }
+                                    return new Wedstrijd(wedId, wedNaam, wedSoort, wedDatum, vereniging);
                                 }
                             }
-                            catch (Exception ex)
-                            {
-                                throw new DataException(ex.Message);
-                            }
-                            finally
-                            {
-                                conn.Close();
-                            }
+
                         }
                     }
                 }
                 return null;
             }
-            catch (NormalException ex)
+            catch (Exception ex)
             {
-                throw new NormalException(ex.Message);
+                throw new DataException(ex.Message);
             }
         }
 
@@ -354,14 +345,15 @@ namespace ArcheryApplication.Classes.Database.SQL
 
                         using (MySqlCommand cmd = new MySqlCommand())
                         {
-                            cmd.CommandText = "SELECT BaanID, BaanNr, BaanLetter, Afstand, WedID, SchutID, SchutBondsNr, SchutNaam, RegDiscipline, SchutGeslacht, SchutEmail, SchutGebDatum, SchutOpmerking, KlasseNaam, SchutVerNr " +
+                            cmd.CommandText = "SELECT DISTINCT BaanID, BaanNr, BaanLetter, Afstand, WedID, SchutID, SchutBondsNr, SchutNaam, RegDiscipline, SchutGeslacht, SchutEmail, SchutGebDatum, SchutOpmerking, KlasseNaam, SchutVerNr " +
                                               "FROM Baanindeling baanindel " +
                                               "LEFT JOIN Wedstrijd W ON W.WedID = baanindel.BaIndelWedID " +
                                               "LEFT JOIN Baan B ON B.BaanId = baanindel.BaIndelBaanID " +
                                               "LEFT JOIN Schutter S ON S.SchutID = baanindel.BaIndelSchutID " +
                                               "LEFT JOIN Klasse K ON K.KlasseID = S.SchutKlasseID " +
                                               "LEFT JOIN Registratie reg ON reg.RegSchutterID = S.SchutID " +
-                                              "WHERE BaIndelWedID = @wedId;";
+                                              "WHERE BaIndelWedID = @wedId " +
+                                              "ORDER BY WedId, BaanNr, BaanLetter;";
 
                             cmd.Parameters.AddWithValue("@wedId", wedstrijd.Id);
                             cmd.Connection = conn;
@@ -572,41 +564,6 @@ namespace ArcheryApplication.Classes.Database.SQL
             }
         }
 
-        public Schutter GetSchutterByNameAndBondsNr(int wedId, int bondsnr, string naam)
-        {
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(_connectie))
-                {
-                    if (conn.State != ConnectionState.Open)
-                    {
-                        conn.Open();
-
-                        using (MySqlCommand cmd = new MySqlCommand())
-                        {
-                            cmd.CommandText = "";
-
-                            cmd.Parameters.AddWithValue("@wedId", wedId);
-                            cmd.Parameters.AddWithValue("@bondsnr", bondsnr);
-                            cmd.Parameters.AddWithValue("@naam", naam);
-                            cmd.Connection = conn;
-
-
-                            using (MySqlDataReader reader = cmd.ExecuteReader())
-                            {
-                                
-                            }
-                        }
-                    }
-                }
-            }
-            catch (NormalException ex)
-            {
-                throw new NormalException(ex.Message);
-            }
-            return null;
-        }
-
         public Schutter GetSchutterById(int wedid, int schutid, string naam)
         {
             try
@@ -641,7 +598,7 @@ namespace ArcheryApplication.Classes.Database.SQL
             return null;
         }
 
-        public void AddSchutterToBaan(int wedId, int schutterId, int baanId)
+        public void AddSchutterToBaan(int wedId, int schutterId, int baanId, int afstand)
         {
             try
             {
@@ -653,11 +610,11 @@ namespace ArcheryApplication.Classes.Database.SQL
 
                         using (MySqlCommand cmd = new MySqlCommand())
                         {
-                            cmd.CommandText = "";
+                            cmd.CommandText = "UPDATE Baanindeling SET BaIndelSchutID = @schutterId WHERE BaIndelBaanID = @baanId AND BaIndelWedID = @wedId;";
 
                             cmd.Parameters.AddWithValue("@wedId", wedId);
                             cmd.Parameters.AddWithValue("@schutterId", schutterId);
-                            cmd.Parameters.AddWithValue("@baanid", baanId);
+                            cmd.Parameters.AddWithValue("@baanId", baanId);
 
                             cmd.Connection = conn;
 
@@ -715,11 +672,11 @@ namespace ArcheryApplication.Classes.Database.SQL
 
                         using (MySqlCommand cmd = new MySqlCommand())
                         {
-                            cmd.CommandText = "";
+                            cmd.CommandText = "UPDATE Baanindeling SET BaIndelSchutID = null WHERE BaIndelWedID = @wedId AND BaIndelBaanID = @baanId AND BaIndelSchutID = @schutterId;";
 
                             cmd.Parameters.AddWithValue("@wedId", wedId);
                             cmd.Parameters.AddWithValue("@schutterId", schutterId);
-                            cmd.Parameters.AddWithValue("@baanid", baanId);
+                            cmd.Parameters.AddWithValue("@baanId", baanId);
 
                             cmd.Connection = conn;
 
@@ -736,12 +693,63 @@ namespace ArcheryApplication.Classes.Database.SQL
 
         public void SubscribeSchutterVoorWedstrijd(int wedId, int schutterId, string discipline)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(_connectie))
+                {
+                    if (conn.State != ConnectionState.Open)
+                    {
+                        conn.Open();
+
+                        using (MySqlCommand cmd = new MySqlCommand())
+                        {
+                            cmd.CommandText = "INSERT INTO Registratie (RegSchutterID, RegWedID, RegDiscipline) VALUES (@schutterId, @wedId, @discipline);";
+
+                            cmd.Parameters.AddWithValue("@wedId", wedId);
+                            cmd.Parameters.AddWithValue("@schutterId", schutterId);
+                            cmd.Parameters.AddWithValue("@discipline", discipline);
+
+                            cmd.Connection = conn;
+
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+            catch (NormalException ex)
+            {
+                throw new NormalException(ex.Message);
+            }
         }
 
         public void UnsubscribeSchutterVoorWedstrijd(int wedId, int schutterId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(_connectie))
+                {
+                    if (conn.State != ConnectionState.Open)
+                    {
+                        conn.Open();
+
+                        using (MySqlCommand cmd = new MySqlCommand())
+                        {
+                            cmd.CommandText = "DELETE FROM Registratie WHERE RegWedID = @wedId AND RegSchutterID = @schutterId;";
+
+                            cmd.Parameters.AddWithValue("@wedId", wedId);
+                            cmd.Parameters.AddWithValue("@schutterId", schutterId);
+
+                            cmd.Connection = conn;
+
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+            catch (NormalException ex)
+            {
+                throw new NormalException(ex.Message);
+            }
         }
     }
 }

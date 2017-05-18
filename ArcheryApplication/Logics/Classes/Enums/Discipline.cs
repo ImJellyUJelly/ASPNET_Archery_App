@@ -4,7 +4,7 @@
     {
         Recurve,
         Compound,
-        Barebow,
-        Houtenboog
+        Longbow,
+        Crossbow
     }
 }

@@ -49,12 +49,15 @@
     <Compile Include="Classes\Database\Interfaces\Connectie.cs" />
     <Compile Include="Classes\Database\Interfaces\IBaanServices.cs" />
     <Compile Include="Classes\Database\Interfaces\ISchutterServices.cs" />
+    <Compile Include="Classes\Database\Interfaces\IVerenigingServices.cs" />
     <Compile Include="Classes\Database\Interfaces\IWedstrijdServices.cs" />
     <Compile Include="Classes\Database\Repositories\BaanRepository.cs" />
     <Compile Include="Classes\Database\Repositories\SchutterRepository.cs" />
+    <Compile Include="Classes\Database\Repositories\VerenigingRepository.cs" />
     <Compile Include="Classes\Database\Repositories\WedstrijdRepository.cs" />
     <Compile Include="Classes\Database\SQL\MysqlBaanLogic.cs" />
     <Compile Include="Classes\Database\SQL\MysqlSchutterLogic.cs" />
+    <Compile Include="Classes\Database\SQL\MysqlVerenigingLogic.cs" />
     <Compile Include="Classes\Database\SQL\MysqlWedstrijdLogic.cs" />
     <Compile Include="Classes\Enums\Discipline.cs" />
     <Compile Include="Classes\Enums\Geslacht.cs" />

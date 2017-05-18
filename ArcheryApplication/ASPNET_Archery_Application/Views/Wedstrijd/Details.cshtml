@@ -81,11 +81,11 @@
                             }
                             else
                             {
-                                <td>Geen schutter</td>
                                 <td>---</td>
                                 <td>---</td>
                                 <td>---</td>
-                                <td>@Html.ActionLink("Add", "AddSchutter", new { id = b.Id })</td>
+                                <td>---</td>
+                                <td>@Html.ActionLink("Add", "AddSchutter", new { id = b.Id, wedId = Model.Id })</td>
                             }
                         </tr>
                     </tbody>

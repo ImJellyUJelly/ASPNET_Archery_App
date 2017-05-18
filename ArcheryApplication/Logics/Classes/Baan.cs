@@ -9,6 +9,8 @@
         public Schutter Schutter { get; private set; }
         public int Afstand { get; private set; }
         public Wedstrijd Wedstrijd { get; private set; }
+        public Vereniging Vereniging { get; private set; }
+
         public Baan(int baanNummer, string letter, int afstand)
         {
             Baannummer = baanNummer;
@@ -25,12 +27,19 @@
             Wedstrijd = wedstrijd;
             CreeerBaanId();
         }
-        public Baan(int id, int baannummer, string letter)
+        public Baan(int id, int baannummer, string letter, int afstand)
         {
             Id = id;
             Baannummer = baannummer;
             Letter = letter;
+            Afstand = afstand;
             CreeerBaanId();
+        }
+
+        public Baan(int id, int baannummer, string letter, int afstand, Wedstrijd wedstrijd, Vereniging vereniging)
+            : this(id, baannummer, letter, afstand, wedstrijd)
+        {
+            Vereniging = vereniging;
         }
 
         public void SetAfstand(int afstand)
