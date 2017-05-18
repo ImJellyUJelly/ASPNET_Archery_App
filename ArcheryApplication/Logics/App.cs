@@ -16,10 +16,12 @@ namespace ArcheryApplication
         private WedstrijdRepository wedstrijdrepo = new WedstrijdRepository(new MysqlWedstrijdLogic());
 
         private List<Wedstrijd> _wedstrijden;
+
         public App()
         {
             _wedstrijden = GetWedstrijdenFromDB();
         }
+
         #region Wedstrijden 
 
         public List<Wedstrijd> GetWedstrijdByClubNr(int clubnr)
@@ -39,6 +41,7 @@ namespace ArcheryApplication
             //TODO
             return wedstrijdrepo.ListWedstrijden();
         }
+
         /// <summary>
         /// Geeft alle wedstrijden.
         /// </summary>
@@ -54,7 +57,17 @@ namespace ArcheryApplication
             return _wedstrijden;
         }
 
-        public void AddWedstrijd(string naam, string date, string wedsoort)
+        public Schutter GetWedstrijdSchutterById(int wedid, int bondsnr, string naam)
+        {
+            return wedstrijdrepo.GetSchutterById(wedid, bondsnr, naam);
+        }
+
+        public Schutter GetSchutterByBondsNrEnNaam(int wedId, int bondsnr, string naam)
+        {
+            return wedstrijdrepo.GetSchutterByNameAndBondsNr(wedId, bondsnr, naam);
+        }
+
+    public void AddWedstrijd(string naam, string date, string wedsoort)
         {
             Soort soort = (Soort)Enum.Parse(typeof(Soort), wedsoort);
             Wedstrijd wedstrijd = new Wedstrijd(naam, soort, date, 1034);
@@ -97,18 +110,18 @@ namespace ArcheryApplication
                 {
                     if (w.Datum == date)
                     {
+                        List<Baan> banen = w.GetBanen();
                         try
                         {
                             foreach (Schutter s in w.GetSchutters())
                             {
                                 wedstrijdrepo.RemoveSchutterFromWedstrijd(w.Id, s.Id);
                             }
-                            foreach (Baan b in w.GetBanen())
+                            foreach (Baan b in banen)
                             {
-                                // Hier ergens zit de error.
                                 wedstrijdrepo.RemoveBanenFromWedstrijd(w, b.Id);
                             }
-                            if (w.GetBanenFromDB().Count == 0)
+                            if (w.GetBanenFromDB() == null)
                             {
                                 wedstrijdrepo.RemoveWedstrijd(w);
                             }
@@ -121,6 +134,12 @@ namespace ArcheryApplication
                 }
             }
         }
+
+        public Vereniging GetVerenigingByNr(int nr)
+        {
+            return wedstrijdrepo.GetVerenigingById(nr);
+        }
+
         #endregion
         #region Schutters
         /// <summary>
@@ -134,15 +153,15 @@ namespace ArcheryApplication
         }
 
         /// <summary>
-        /// Geeft een schutter.
+        /// Geeft een schutter van een bepaalde wedstrijd.
         /// </summary>
         /// <param name="wedstrijdId"> Het ID van een wedstrijd waar deze schutter aan meedoet </param>
         /// <param name="bondsnummers"> Het bondsnummer van de persoon, als deze niet bekend is, is het -1 </param>
         /// <param name="naam"> De naam van de schutter (voor- en achternaam) </param>
         /// <returns> Een schutter </returns>
-        public Schutter GetSchutter(int wedstrijdId, int bondsnummers, string naam)
+        public Schutter GetSchutter(int wedstrijdId, int bondsnummer, string naam)
         {
-            throw new NotImplementedException();
+            return wedstrijdrepo.GetSchutterById(wedstrijdId, bondsnummer, naam);
         }
 
         /// <summary>
@@ -159,6 +178,14 @@ namespace ArcheryApplication
         public void SchutterAanmelden(int wedstrijdId, int bondsnummer, string naam, string geboortedatum, string geslacht, string discipline, string klasse, string opmerking)
         {
             throw new NotImplementedException();
+        }
+
+        public void GeefSchutterEenClub(int wedid, int bondsnr, string naam, int vernr)
+        {
+            Schutter schutter = wedstrijdrepo.GetSchutterByNameAndBondsNr(wedid, bondsnr, naam);
+            Vereniging vereniging = wedstrijdrepo.GetVerenigingById(vernr);
+
+            schutter.SetVereniging(vereniging);
         }
 
         /// <summary>
@@ -207,7 +234,7 @@ namespace ArcheryApplication
         /// <param name="schutterId"> Het ID van een schutter </param>
         public void VoegSchutterToeAanBaan(int baanId, int wedstrijdId, int schutterId)
         {
-            throw new NotImplementedException();
+            wedstrijdrepo.AddSchutterToBaan(wedstrijdId, schutterId, baanId);
         }
 
         /// <summary>
@@ -217,6 +244,16 @@ namespace ArcheryApplication
         /// <param name="wedstrijdId"> Het ID van een wedstrijd </param>
         /// <param name="schutterId"> Het ID van een schutter </param>
         public void VerwijderSchutterVanBaaN(int baanId, int wedstrijdId, int schutterId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RegistreerSchutterOpWedstrijd(int wedId, int schutterId, string discipline)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnregistreerSchutterVanWedstrijd(int wedId, int schutterId)
         {
             throw new NotImplementedException();
         }

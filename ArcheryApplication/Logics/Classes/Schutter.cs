@@ -67,6 +67,11 @@ namespace ArcheryApplication.Classes
             Baan = b;
         }
 
+        public void SetVereniging(Vereniging vereniging)
+        {
+            Vereniging = vereniging;
+        }
+
         public int CompareSchutters(Schutter andereSchutter)
         {
             int result = Bondsnummer.CompareTo(andereSchutter.Bondsnummer);

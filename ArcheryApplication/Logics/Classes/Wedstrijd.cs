@@ -14,9 +14,9 @@ namespace ArcheryApplication.Classes
         List<Baan> _banen = new List<Baan>();
         List<Schutter> _schutters = new List<Schutter>();
         public int Id { get; private set; }
-        public string Naam { get; private set; }
-        public Soort Soort { get; private set; }
-        public string Datum { get; private set; }
+        public string Naam { get;  set; }
+        public Soort Soort { get;  set; }
+        public string Datum { get;  set; }
         public Vereniging Vereniging { get; private set; }
         public Wedstrijd(int id, string naam, Soort soort, string datum, Vereniging vereniging)
         {
@@ -89,6 +89,18 @@ namespace ArcheryApplication.Classes
             return true;
         }
 
+        public void DeleteBaan(int baanId)
+        {
+            foreach (Baan b in _banen)
+            {
+                if (b.Id == baanId)
+                {
+                    _banen.Remove(b);
+                    break;
+                }
+            }
+        }
+
         public void LaadBanen()
         {
             try
@@ -158,7 +170,7 @@ namespace ArcheryApplication.Classes
 
         public List<Baan> GetBanenFromDB()
         {
-            return banenrepo.ListBanen(Vereniging.VerNr);
+            return wedstrijdrepo.WedstrijdBanen(this);
         }
 
         public List<Baan> GetBanen()

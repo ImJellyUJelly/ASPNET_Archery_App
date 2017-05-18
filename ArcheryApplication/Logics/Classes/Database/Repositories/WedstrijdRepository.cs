@@ -7,6 +7,7 @@ namespace ArcheryApplication.Classes.Database.Repositories
     public class WedstrijdRepository
     {
         private IWedstrijdServices _wedstrijdLogic;
+
         public WedstrijdRepository(IWedstrijdServices wedstrijdLogic)
         {
             this._wedstrijdLogic = wedstrijdLogic;
@@ -47,7 +48,17 @@ namespace ArcheryApplication.Classes.Database.Repositories
             return _wedstrijdLogic.GetWedstrijdById(wedstrijdId);
         }
 
-        public List<Wedstrijd> ListWedstrijden()
+        public Schutter GetSchutterById(int wedid, int bondsnr, string naam)
+        {
+            return _wedstrijdLogic.GetSchutterById(wedid, bondsnr, naam);
+        }
+
+        public Schutter GetSchutterByNameAndBondsNr(int wedId, int bondsnr, string naam)
+        {
+            return _wedstrijdLogic.GetSchutterByNameAndBondsNr(wedId, bondsnr, naam);
+        }
+
+    public List<Wedstrijd> ListWedstrijden()
         {
             return _wedstrijdLogic.ListWedstrijden();
         }
@@ -80,6 +91,36 @@ namespace ArcheryApplication.Classes.Database.Repositories
         public Vereniging GetVerenigingById(int verNr)
         {
             return _wedstrijdLogic.GetVerenigingById(verNr);
+        }
+
+        public List<Baan> GetWedstrijdBanen(Wedstrijd wedstrijd)
+        {
+            return _wedstrijdLogic.GetWedstrijdBanen(wedstrijd);
+        }
+
+        public void AddSchutterToBaan(int wedId, int schutterId, int baanId)
+        {
+            _wedstrijdLogic.AddSchutterToBaan(wedId, schutterId, baanId);
+        }
+
+        public void BewerkSchutterOpBaan(int wedId, int schutterId, int baanId)
+        {
+            _wedstrijdLogic.BewerkSchutterOpBaan(wedId, schutterId, baanId);
+        }
+
+        public void VerwijderSchutterVanBaan(int wedId, int schutterId, int baanId)
+        {
+            _wedstrijdLogic.VerwijderSchutterVanBaan(wedId, schutterId, baanId);
+        }
+
+        public void SubscribeSchutterVoorWedstrijd(int wedId, int schutterId, string discipline)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnsubscribeSchutterVoorWedstrijd(int wedId, int schutterId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

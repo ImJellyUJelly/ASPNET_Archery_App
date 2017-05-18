@@ -571,5 +571,177 @@ namespace ArcheryApplication.Classes.Database.SQL
                 throw new DataException(dex.Message);
             }
         }
+
+        public Schutter GetSchutterByNameAndBondsNr(int wedId, int bondsnr, string naam)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(_connectie))
+                {
+                    if (conn.State != ConnectionState.Open)
+                    {
+                        conn.Open();
+
+                        using (MySqlCommand cmd = new MySqlCommand())
+                        {
+                            cmd.CommandText = "";
+
+                            cmd.Parameters.AddWithValue("@wedId", wedId);
+                            cmd.Parameters.AddWithValue("@bondsnr", bondsnr);
+                            cmd.Parameters.AddWithValue("@naam", naam);
+                            cmd.Connection = conn;
+
+
+                            using (MySqlDataReader reader = cmd.ExecuteReader())
+                            {
+                                
+                            }
+                        }
+                    }
+                }
+            }
+            catch (NormalException ex)
+            {
+                throw new NormalException(ex.Message);
+            }
+            return null;
+        }
+
+        public Schutter GetSchutterById(int wedid, int schutid, string naam)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(_connectie))
+                {
+                    if (conn.State != ConnectionState.Open)
+                    {
+                        conn.Open();
+
+                        using (MySqlCommand cmd = new MySqlCommand())
+                        {
+                            cmd.CommandText = "";
+
+                            //cmd.Parameters.AddWithValue("@schutterId", );
+
+                            cmd.Connection = conn;
+
+
+                            using (MySqlDataReader reader = cmd.ExecuteReader())
+                            {
+
+                            }
+                        }
+                    }
+                }
+            }
+            catch (NormalException ex)
+            {
+                throw new NormalException(ex.Message);
+            }
+            return null;
+        }
+
+        public void AddSchutterToBaan(int wedId, int schutterId, int baanId)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(_connectie))
+                {
+                    if (conn.State != ConnectionState.Open)
+                    {
+                        conn.Open();
+
+                        using (MySqlCommand cmd = new MySqlCommand())
+                        {
+                            cmd.CommandText = "";
+
+                            cmd.Parameters.AddWithValue("@wedId", wedId);
+                            cmd.Parameters.AddWithValue("@schutterId", schutterId);
+                            cmd.Parameters.AddWithValue("@baanid", baanId);
+
+                            cmd.Connection = conn;
+
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+            catch (NormalException ex)
+            {
+                throw new NormalException(ex.Message);
+            }
+        }
+
+        public void BewerkSchutterOpBaan(int wedId, int schutterId, int baanId)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(_connectie))
+                {
+                    if (conn.State != ConnectionState.Open)
+                    {
+                        conn.Open();
+
+                        using (MySqlCommand cmd = new MySqlCommand())
+                        {
+                            cmd.CommandText = "";
+
+                            cmd.Parameters.AddWithValue("@wedId", wedId);
+                            cmd.Parameters.AddWithValue("@schutterId", schutterId);
+                            cmd.Parameters.AddWithValue("@baanid", baanId);
+
+                            cmd.Connection = conn;
+
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+            catch (NormalException ex)
+            {
+                throw new NormalException(ex.Message);
+            }
+        }
+
+        public void VerwijderSchutterVanBaan(int wedId, int schutterId, int baanId)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(_connectie))
+                {
+                    if (conn.State != ConnectionState.Open)
+                    {
+                        conn.Open();
+
+                        using (MySqlCommand cmd = new MySqlCommand())
+                        {
+                            cmd.CommandText = "";
+
+                            cmd.Parameters.AddWithValue("@wedId", wedId);
+                            cmd.Parameters.AddWithValue("@schutterId", schutterId);
+                            cmd.Parameters.AddWithValue("@baanid", baanId);
+
+                            cmd.Connection = conn;
+
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+            catch (NormalException ex)
+            {
+                throw new NormalException(ex.Message);
+            }
+        }
+
+        public void SubscribeSchutterVoorWedstrijd(int wedId, int schutterId, string discipline)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnsubscribeSchutterVoorWedstrijd(int wedId, int schutterId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

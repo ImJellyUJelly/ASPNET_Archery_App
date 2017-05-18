@@ -5,6 +5,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ArcheryApplication.Classes;
+using ArcheryApplication.Classes.Database.Repositories;
+using ArcheryApplication.Classes.Enums;
 
 namespace ASPNET_Archery_Application.Controllers
 {
@@ -50,9 +52,10 @@ namespace ASPNET_Archery_Application.Controllers
         }
 
         [HttpGet]
-        public ActionResult Edit()
+        public ActionResult Edit(int id)
         {
-            return View();
+            Wedstrijd wedstrijd = app.GetWedstrijdById(id);
+            return View(wedstrijd);
         }
 
         [HttpPost]
@@ -81,7 +84,7 @@ namespace ASPNET_Archery_Application.Controllers
                 return HttpNotFound(ex.Message);
             }
         }
-
+        [HttpGet]
         public ActionResult AddSchutter(int id)
         {
             try
@@ -93,10 +96,60 @@ namespace ASPNET_Archery_Application.Controllers
                 return HttpNotFound(ex.Message);
             }
         }
-
-        public ActionResult EditSchutter(int id)
+        [HttpPost]
+        public ActionResult AddSchutter(FormCollection schutterCollection)
         {
-            return View();
+            try
+            {
+                int wedId = Convert.ToInt32(schutterCollection["WedId"]);
+                string naam = schutterCollection["Naam"];
+                int bondsnummer = Convert.ToInt32(schutterCollection["Bondsnummer"]);
+                Schutter schutter = null;
+                schutter = app.GetSchutterByBondsNrEnNaam(wedId, bondsnummer, naam);
+                if (schutter == null)
+                {
+                    Klasse klasse = (Klasse)Enum.Parse(typeof(Klasse), schutterCollection["Klasse"]);
+                    Discipline discipline = (Discipline)Enum.Parse(typeof(Discipline), schutterCollection["Discipline"]);
+                    Geslacht geslacht = (Geslacht)Enum.Parse(typeof(Geslacht), schutterCollection["Geslacht"]);
+                    string email = schutterCollection["Emailadres"];
+                    DateTime geboortedatum = DateTime.Parse(schutterCollection["Geboortedatum"]);
+                    string opmerking = schutterCollection["Opmerking"];
+                    int vereniging = 1034;
+
+                    schutter = new Schutter(bondsnummer, naam, email, klasse, discipline, geslacht, geboortedatum, opmerking);
+                    app.GeefSchutterEenClub(wedId, bondsnummer, naam, vereniging);
+                }
+
+                if (schutterCollection["BaanId"] != null)
+                {
+                    //app.VoegSchutterToeAanBaan(schutterCollection["BaanId"]);
+                }
+
+                //app.RegistreerSchutterOpWedstrijd(wedId, );
+                return View();
+            }
+            catch (Exception ex)
+            {
+                return HttpNotFound(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult EditSchutter(int id, FormCollection form)
+        {
+            try
+            {
+                //Soort soort = (Soort) Enum.Parse(typeof(Soort), form["Soort"]);
+                //Wedstrijd wedstrijd = new Wedstrijd(form["Naam"], soort, form["Datum"], 1034);
+                //Schutter schutter = app.GetWedstrijdSchutterById(wedstrijd.Id, Convert.ToInt32(form["schutid"]), form["naam"]);
+
+                //Schutter schutter = app.GetWedstrijdSchutterById(wedstrijd.Id, id, "Jelle Schräder");
+                return View();
+            }
+            catch (Exception ex)
+            {
+                return HttpNotFound(ex.Message);
+            }
         }
 
         public ActionResult Delete(int id)
