@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using ArcheryApplication.Classes;
-using ArcheryApplication.Classes.Enums;
-using ArcheryApplication.Classes.Database.Repositories;
-using ArcheryApplication.Classes.Database.SQL;
+using ArcheryApplication.Storage;
 
 namespace ArcheryApplication
 {
@@ -59,9 +57,9 @@ namespace ArcheryApplication
             return _wedstrijden;
         }
 
-        public Schutter GetWedstrijdSchutterById(int wedid, int bondsnr, string naam)
+        public Schutter GetWedstrijdSchutterById(int wedid, int schutterId)
         {
-            return wedstrijdrepo.GetSchutterById(wedid, bondsnr, naam);
+            return wedstrijdrepo.GetSchutterById(wedid, schutterId);
         }
 
         public Schutter GetSchutterByBondsNrEnNaam(int bondsnr, string naam)
@@ -161,9 +159,9 @@ namespace ArcheryApplication
         /// <param name="bondsnummers"> Het bondsnummer van de persoon, als deze niet bekend is, is het -1 </param>
         /// <param name="naam"> De naam van de schutter (voor- en achternaam) </param>
         /// <returns> Een schutter </returns>
-        public Schutter GetSchutter(int wedstrijdId, int bondsnummer, string naam)
+        public Schutter GetSchutter(int wedstrijdId, int schutId)
         {
-            return wedstrijdrepo.GetSchutterById(wedstrijdId, bondsnummer, naam);
+            return wedstrijdrepo.GetSchutterById(wedstrijdId, schutId);
         }
 
         public Schutter GetSchutterById(int schutterId)

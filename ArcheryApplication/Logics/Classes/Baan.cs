@@ -1,5 +1,5 @@
 ﻿namespace ArcheryApplication.Classes
-{
+{ 
     public class Baan
     {
         public int Id { get; private set; }

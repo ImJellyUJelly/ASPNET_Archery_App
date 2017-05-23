@@ -1,18 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graphical_User_Interface", "ASPNET_Archery_Application\Graphical_User_Interface.csproj", "{92101ECC-0D9D-419F-93AD-80C88D175C5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Storage", "Storage\Storage.csproj", "{720105E7-5667-436D-8CD0-2358335BC350}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B991CEC4-C92F-4BBC-A579-D7A1FD685DAE}"
-	ProjectSection(SolutionItems) = preProject
-		README.txt = README.txt
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logics", "Logics\Logics.csproj", "{9794E88F-63E1-4010-92BD-123BB70EF0CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI", "WebAPI\WebAPI.csproj", "{37D4BCBF-BE76-42A0-B709-A9EA506D88FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogicsTests", "LogicsTests\LogicsTests.csproj", "{B22B5441-BF80-4088-8C2C-5A68B20AD411}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,14 +21,18 @@ Global
 		{92101ECC-0D9D-419F-93AD-80C88D175C5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92101ECC-0D9D-419F-93AD-80C88D175C5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92101ECC-0D9D-419F-93AD-80C88D175C5E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{720105E7-5667-436D-8CD0-2358335BC350}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{720105E7-5667-436D-8CD0-2358335BC350}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{720105E7-5667-436D-8CD0-2358335BC350}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{720105E7-5667-436D-8CD0-2358335BC350}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9794E88F-63E1-4010-92BD-123BB70EF0CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9794E88F-63E1-4010-92BD-123BB70EF0CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9794E88F-63E1-4010-92BD-123BB70EF0CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9794E88F-63E1-4010-92BD-123BB70EF0CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37D4BCBF-BE76-42A0-B709-A9EA506D88FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37D4BCBF-BE76-42A0-B709-A9EA506D88FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37D4BCBF-BE76-42A0-B709-A9EA506D88FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37D4BCBF-BE76-42A0-B709-A9EA506D88FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B22B5441-BF80-4088-8C2C-5A68B20AD411}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B22B5441-BF80-4088-8C2C-5A68B20AD411}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B22B5441-BF80-4088-8C2C-5A68B20AD411}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B22B5441-BF80-4088-8C2C-5A68B20AD411}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

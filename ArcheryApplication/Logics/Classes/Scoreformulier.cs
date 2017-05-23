@@ -11,6 +11,12 @@ namespace ArcheryApplication.Classes
             ScorePerAfstand = new List<Score>();
             TotaalScore = 0;
         }
+
+        public int GetScores()
+        {
+            return TotaalScore;
+        }
+
         //update
         public bool AddScore(Score score)
         {
@@ -25,6 +31,7 @@ namespace ArcheryApplication.Classes
                 throw sex;
             }
         }
+
         public bool ChangeScore(Score score)
         {
             try

@@ -77,7 +77,7 @@
                                 <td name="@b.Schutter.Discipline">@Html.DisplayFor(model => b.Schutter.Discipline)</td>
                                 <td name="@b.Schutter.Klasse">@Html.DisplayFor(model => b.Schutter.Klasse)</td>
                                 <td name="@b.Schutter.Geslacht">@Html.DisplayFor(model => b.Schutter.Geslacht)</td>
-                                <td>@Html.ActionLink("Edit", "EditSchutter", new { id = b.Schutter.Id })</td>
+                                <td>@Html.ActionLink("Edit", "EditSchutter", new { id = b.Schutter.Id, wedId = Model.Id })</td>
                             }
                             else
                             {

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using ArcheryApplication.Classes.Enums;
-using ArcheryApplication.Exceptions;
-using ArcheryApplication.Classes.Database.Repositories;
-using ArcheryApplication.Classes.Database.SQL;
+using ArcheryApplication.Storage;
 
 namespace ArcheryApplication.Classes
 {
@@ -14,9 +11,9 @@ namespace ArcheryApplication.Classes
         List<Baan> _banen = new List<Baan>();
         List<Schutter> _schutters = new List<Schutter>();
         public int Id { get; private set; }
-        public string Naam { get;  set; }
-        public Soort Soort { get;  set; }
-        public string Datum { get;  set; }
+        public string Naam { get; set; }
+        public Soort Soort { get; set; }
+        public string Datum { get; set; }
         public Vereniging Vereniging { get; private set; }
         public Wedstrijd(int id, string naam, Soort soort, string datum, Vereniging vereniging)
         {

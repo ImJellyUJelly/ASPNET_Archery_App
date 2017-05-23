@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using ArcheryApplication;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using ArcheryApplication.Classes;
-using ArcheryApplication.Classes.Database.Repositories;
-using ArcheryApplication.Classes.Enums;
 
 namespace ASPNET_Archery_Application.Controllers
 {
@@ -24,7 +19,6 @@ namespace ASPNET_Archery_Application.Controllers
             {
                 return HttpNotFound(ex.Message);
             }
-
         }
 
         [HttpGet]
@@ -54,7 +48,7 @@ namespace ASPNET_Archery_Application.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            Wedstrijd wedstrijd = app.GetWedstrijdById(id);
+            var wedstrijd = app.GetWedstrijdById(id);
             return View(wedstrijd);
         }
 
@@ -89,8 +83,8 @@ namespace ASPNET_Archery_Application.Controllers
         {
             try
             {
-                Baan baan = app.GetWedstrijdBaanById(id, wedId);
-                Schutter schutter = new Schutter();
+                var baan = app.GetWedstrijdBaanById(id, wedId);
+                var schutter = new Schutter();
                 schutter.GeefSchutterEenBaan(baan);
                 return View(schutter);
             }
@@ -104,16 +98,14 @@ namespace ASPNET_Archery_Application.Controllers
         {
             try
             {
-                Baan baan = app.GetWedstrijdBaanById(Convert.ToInt32(schutterCollection["Baan.Id"]), Convert.ToInt32(schutterCollection["Baan.Wedstrijd.Id"]));
+                var baan = app.GetWedstrijdBaanById(Convert.ToInt32(schutterCollection["Baan.Id"]), Convert.ToInt32(schutterCollection["Baan.Wedstrijd.Id"]));
                 string naam = schutterCollection["Naam"];
                 int bondsnummer = Convert.ToInt32(schutterCollection["Bondsnummer"]);
-                Schutter schutter = null;
-                schutter = app.GetSchutterByBondsNrEnNaam(bondsnummer, naam);
-                string discipline;
+                var schutter = app.GetSchutterByBondsNrEnNaam(bondsnummer, naam);
                 if (schutter == null)
                 {
                     string klasse = schutterCollection["Klasse"];
-                    discipline = schutterCollection["Discipline"];
+                    string discipline = schutterCollection["Discipline"];
                     string geslacht = schutterCollection["Geslacht"];
                     string email = schutterCollection["Emailadres"];
                     string geboortedatum = schutterCollection["Geboortedatum"];
@@ -139,16 +131,12 @@ namespace ASPNET_Archery_Application.Controllers
         }
 
         [HttpGet]
-        public ActionResult EditSchutter(int id, FormCollection form)
+        public ActionResult EditSchutter(int id, int wedId)
         {
             try
             {
-                //Soort soort = (Soort) Enum.Parse(typeof(Soort), form["Soort"]);
-                //Wedstrijd wedstrijd = new Wedstrijd(form["Naam"], soort, form["Datum"], 1034);
-                //Schutter schutter = app.GetWedstrijdSchutterById(wedstrijd.Id, Convert.ToInt32(form["schutid"]), form["naam"]);
-
-                //Schutter schutter = app.GetWedstrijdSchutterById(wedstrijd.Id, id, "Jelle Schräder");
-                return View();
+                var schutter = app.GetWedstrijdSchutterById(wedId, id);
+                return View(schutter);
             }
             catch (Exception ex)
             {
@@ -160,8 +148,8 @@ namespace ASPNET_Archery_Application.Controllers
         {
             try
             {
-                Wedstrijd wedstrijd = app.GetWedstrijdById(id);
-                foreach (Baan b in wedstrijd.GetBanen())
+                var wedstrijd = app.GetWedstrijdById(id);
+                foreach (var b in wedstrijd.GetBanen())
                 {
                     if (b.Schutter != null)
                     {
