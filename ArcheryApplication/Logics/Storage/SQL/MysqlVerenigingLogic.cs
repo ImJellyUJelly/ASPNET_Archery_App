@@ -22,9 +22,9 @@ namespace ArcheryApplication.Storage
                         using (MySqlCommand cmd = new MySqlCommand())
                         {
                             cmd.CommandText =
-                                "SELECT VerNr, VerNaam, VerStraatNaam, VerHuisNr, VerPostcode, VerStad FROM Vereniging WHERE VerID = @verId;";
+                                "SELECT VerNr, VerNaam, VerStraatNaam, VerHuisNr, VerPostcode, VerStad FROM Vereniging WHERE VerNr = @verNr;";
 
-                            cmd.Parameters.AddWithValue("@verId", verId);
+                            cmd.Parameters.AddWithValue("@verNr", verId);
                             cmd.Connection = conn;
 
                             using (MySqlDataReader reader = cmd.ExecuteReader())
@@ -135,6 +135,48 @@ namespace ArcheryApplication.Storage
             catch (DataException dex)
             {
                 throw new DataException(dex.Message);
+            }
+        }
+
+        public List<Baan> GetListBanen(int verNr)
+        {
+            try
+            {
+                List<Baan> banen = new List<Baan>();
+                using (MySqlConnection conn = new MySqlConnection(_connectie))
+                {
+                    if (conn.State != ConnectionState.Open)
+                    {
+                        conn.Open();
+
+                        using (MySqlCommand cmd = new MySqlCommand())
+                        {
+                            cmd.CommandText = "SELECT BaanID, BaanNr, Baanletter FROM Baan WHERE BaanVerNr = @baanvernr;";
+
+                            cmd.Parameters.AddWithValue("@baanvernr", verNr);
+
+                            cmd.Connection = conn;
+
+                            using (MySqlDataReader reader = cmd.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    int baanid = reader.GetInt32(0);
+                                    int baannummer = reader.GetInt32(1);
+                                    string baanletter = reader.GetString(2);
+
+                                    banen.Add(new Baan(baanid, baannummer, baanletter, 70));
+                                }
+                                return banen;
+                            }
+                        }
+                    }
+                }
+                return null;
+            }
+            catch (NormalException ex)
+            {
+                throw new NormalException(ex.Message);
             }
         }
     }

@@ -13,19 +13,9 @@ namespace ArcheryApplication.Storage
             _wedstrijdLogic = wedstrijdLogic;
         }
 
-        public void AddBaanToWedstrijd(Baan baan, int wedstrijdId)
-        {
-            _wedstrijdLogic.AddBaanToWedstrijd(baan, wedstrijdId);
-        }
-
         public void AddWedstrijd(Wedstrijd wedstrijd)
         {
             _wedstrijdLogic.AddWedstrijd(wedstrijd);
-        }
-
-        public void EditBaanFromWedstrijd(Baan baan, int wedstrijdId)
-        {
-            _wedstrijdLogic.EditBaanFromWedstrijd(baan, wedstrijdId);
         }
 
         public void EditWedstrijd(Wedstrijd wedstrijd)
@@ -33,7 +23,7 @@ namespace ArcheryApplication.Storage
             _wedstrijdLogic.EditWedstrijd(wedstrijd);
         }
 
-        public Wedstrijd GetWedstrijdByDate(DateTime date)
+        public Wedstrijd GetWedstrijdByDate(string date)
         {
             return _wedstrijdLogic.GetWedstrijdByDate(date);
         }
@@ -48,74 +38,14 @@ namespace ArcheryApplication.Storage
             return _wedstrijdLogic.GetWedstrijdById(wedstrijdId);
         }
 
-        public Schutter GetSchutterById(int wedid, int schutId)
-        {
-            return _wedstrijdLogic.GetSchutterById(wedid, schutId);
-        }
-
         public List<Wedstrijd> ListWedstrijden()
         {
             return _wedstrijdLogic.ListWedstrijden();
         }
 
-        public void RemoveBanenFromWedstrijd(Wedstrijd wedstrijd, int baanid)
-        {
-            _wedstrijdLogic.RemoveBanenFromWedstrijd(wedstrijd, baanid);
-        }
-
-        public void RemoveSchutterFromWedstrijd(int wedId, int schutterId)
-        {
-            _wedstrijdLogic.RemoveSchutterFromWedstrijd(wedId, schutterId);
-        }
-
         public void RemoveWedstrijd(Wedstrijd wedstrijd)
         {
             _wedstrijdLogic.RemoveWedstrijd(wedstrijd);
-        }
-
-        public List<Baan> WedstrijdBanen(Wedstrijd wedstrijd)
-        {
-            return _wedstrijdLogic.GetWedstrijdBanen(wedstrijd);
-        }
-
-        public List<Schutter> GetWedstrijdSchutters(Wedstrijd wedstrijd)
-        {
-            return _wedstrijdLogic.GetWedstrijdSchutters(wedstrijd);
-        }
-
-        public Vereniging GetVerenigingById(int verNr)
-        {
-            return _wedstrijdLogic.GetVerenigingById(verNr);
-        }
-
-        public List<Baan> GetWedstrijdBanen(Wedstrijd wedstrijd)
-        {
-            return _wedstrijdLogic.GetWedstrijdBanen(wedstrijd);
-        }
-
-        public void AddSchutterToBaan(int wedId, int schutterId, int baanId, int afstand)
-        {
-            _wedstrijdLogic.AddSchutterToBaan(wedId, schutterId, baanId, afstand);
-        }
-
-        public void BewerkSchutterOpBaan(int wedId, int schutterId, int baanId)
-        {
-            _wedstrijdLogic.BewerkSchutterOpBaan(wedId, schutterId, baanId);
-        }
-
-        public void VerwijderSchutterVanBaan(int wedId, int schutterId, int baanId)
-        {
-            _wedstrijdLogic.VerwijderSchutterVanBaan(wedId, schutterId, baanId);
-        }
-
-        public void SubscribeSchutterVoorWedstrijd(int wedId, int schutterId, string discipline)
-        {
-            _wedstrijdLogic.SubscribeSchutterVoorWedstrijd(wedId, schutterId, discipline);
-        }
-
-        public void UnsubscribeSchutterVoorWedstrijd(int wedId, int schutterId)
-        {
-            _wedstrijdLogic.UnsubscribeSchutterVoorWedstrijd(wedId, schutterId);
         }
     }
 }

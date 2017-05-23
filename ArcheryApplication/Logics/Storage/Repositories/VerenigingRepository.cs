@@ -27,5 +27,10 @@ namespace ArcheryApplication.Storage
         {
             return _verenigingLogic.GetVerenigingByNr(verNr);
         }
+
+        public List<Baan> GetListBanen(int verNr)
+        {
+            return _verenigingLogic.GetListBanen(verNr);
+        }
     }
 }

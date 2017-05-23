@@ -119,7 +119,7 @@ namespace ASPNET_Archery_Application.Controllers
                 app.RegistreerSchutterOpWedstrijd(baan.Wedstrijd.Id, schutter.Id, schutter.Discipline.ToString());
                 if (schutterCollection["Baan.Id"] != null)
                 {
-                    app.VoegSchutterToeAanBaan(baan.Id, baan.Wedstrijd.Id, schutter.Id, baan.Afstand);
+                    app.VoegSchutterToeAanBaan(baan.Id, baan.Wedstrijd.Id, schutter.Id);
                 }
 
                 return RedirectToAction("Details", new {id = baan.Wedstrijd.Id});

@@ -3,9 +3,10 @@ using ArcheryApplication.Classes;
 
 namespace ArcheryApplication.Storage
 {
-    public class BaanRepository : IBaanServices
+    public class BaanRepository
     {
         private IBaanServices _baanLogic;
+
         public BaanRepository(IBaanServices baanLogic)
         {
             this._baanLogic = baanLogic;
@@ -14,11 +15,6 @@ namespace ArcheryApplication.Storage
         public void AddBaan(Baan baan)
         {
             _baanLogic.AddBaan(baan);
-        }
-
-        public void AddSchutterTobaan(Schutter schutter, int baanId)
-        {
-            _baanLogic.AddSchutterTobaan(schutter, baanId);
         }
 
         public void EditBaan(Baan baan)
@@ -36,29 +32,9 @@ namespace ArcheryApplication.Storage
             return _baanLogic.GetBaanByNummer(baanNummer);
         }
 
-        public List<Baan> ListBanen(int VerNr)
-        {
-            return _baanLogic.ListBanen(VerNr);
-        }
-
-        public List<Schutter> ListSchuttersOpBaan(int baanId)
-        {
-            return _baanLogic.ListSchuttersOpBaan(baanId);
-        }
-
         public void RemoveBaan(Baan baan)
         {
             _baanLogic.RemoveBaan(baan);
-        }
-
-        public void RemoveSchutterFromBaan(Schutter schutter, int baanId)
-        {
-            _baanLogic.RemoveSchutterFromBaan(schutter, baanId);
-        }
-
-        public Baan GetBaanIdFromWedstrijd(int baanId, int wedId)
-        {
-            return _baanLogic.GetBaanIdFromWedstrijd(baanId, wedId);
         }
     }
 }

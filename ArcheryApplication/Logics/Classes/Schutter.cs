@@ -95,11 +95,6 @@ namespace ArcheryApplication.Classes
             return result;
         }
 
-        public bool Equals(object obj)
-        {
-            return base.Equals(obj);
-        }
-
         public override string ToString()
         {
             return $"{Bondsnummer} { Naam } - Klasse: { Klasse } - Geslacht: { Geslacht } - Discipline: { Discipline } - Geb.Datum: { Geboortedatum.ToShortDateString() } - Score: { ScoreFormulier.TotaalScore.ToString() }";

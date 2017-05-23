@@ -8,6 +8,10 @@ namespace ArcheryApplication.Classes
     {
         private WedstrijdRepository wedstrijdrepo = new WedstrijdRepository(new MysqlWedstrijdLogic());
         private BaanRepository banenrepo = new BaanRepository(new MysqlBaanLogic());
+        private SchutterRepository schutterrepo = new SchutterRepository(new MysqlSchutterLogic());
+        private VerenigingRepository verenigingrepo = new VerenigingRepository(new MysqlVerenigingLogic());
+        private RegistratieRepository registratierepo = new RegistratieRepository(new MysqlRegisterLogic());
+        private BaanindelingRepository baanindelingrepo = new BaanindelingRepository(new MysqlBaanindelingLogic());
         List<Baan> _banen = new List<Baan>();
         List<Schutter> _schutters = new List<Schutter>();
         public int Id { get; private set; }
@@ -29,7 +33,7 @@ namespace ArcheryApplication.Classes
             Naam = naam;
             Soort = soort;
             Datum = datum;
-            Vereniging = wedstrijdrepo.GetVerenigingById(vereniging);
+            Vereniging = verenigingrepo.GetVerenigingById(vereniging);
             LaadBanen();
         }
 
@@ -104,7 +108,7 @@ namespace ArcheryApplication.Classes
             {
                 if (Id != 0)
                 {
-                    List<Baan> banenUitDb = wedstrijdrepo.WedstrijdBanen(this);
+                    List<Baan> banenUitDb = baanindelingrepo.GetWedstrijdBanen(this);
                     if (banenUitDb != null)
                     {
                         _banen = banenUitDb;
@@ -162,12 +166,12 @@ namespace ArcheryApplication.Classes
 
         private List<Schutter> GetSchuttersFromDB()
         {
-            return wedstrijdrepo.GetWedstrijdSchutters(this);
+            return registratierepo.GetWedstrijdSchutters(this);
         }
 
         public List<Baan> GetBanenFromDB()
         {
-            return wedstrijdrepo.WedstrijdBanen(this);
+            return baanindelingrepo.GetWedstrijdBanen(this);
         }
 
         public List<Baan> GetBanen()
@@ -202,7 +206,7 @@ namespace ArcheryApplication.Classes
         private void BaanIndelingMaken(int aantalBanen)
         {
             aantalBanen *= 4;
-            List<Baan> banen = banenrepo.ListBanen(Vereniging.VerNr);
+            List<Baan> banen = verenigingrepo.GetListBanen(Vereniging.VerNr);
             for (int baannr = 0; baannr < aantalBanen; baannr++)
             {
                 CreateBaan(banen, baannr);
@@ -214,7 +218,7 @@ namespace ArcheryApplication.Classes
             Baan baan;
             baan = banen[baanid];
             baan.SetAfstand(70);
-            wedstrijdrepo.AddBaanToWedstrijd(baan, Id);
+            baanindelingrepo.AddBaanToWedstrijd(baan, Id);
             _banen.Add(baan);
         }
 

@@ -12,5 +12,6 @@ namespace ArcheryApplication.Storage
         Vereniging GetVerenigingById(int verId);
         Vereniging GetVerenigingByName(string name);
         Vereniging GetVerenigingByNr(int verNr);
+        List<Baan> GetListBanen(int verNr);
     }
 }
