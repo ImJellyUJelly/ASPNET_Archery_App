@@ -57,6 +57,10 @@ namespace ASPNET_Archery_Application.Controllers
         {
             try
             {
+                string naam = form["Naam"];
+                string datum = form["Datum"];
+
+                app.BewerkWedstrijd(naam, datum);
                 return RedirectToAction("Index");
             }
             catch (Exception ex)

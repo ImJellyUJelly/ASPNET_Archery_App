@@ -86,7 +86,9 @@ namespace ArcheryApplication
 
         public void BewerkWedstrijd(string naam, string date)
         {
-            throw new NotImplementedException();
+            Wedstrijd wedstrijd = wedstrijdrepo.GetWedstrijdByName(naam);
+            wedstrijd.BewerkWedstrijd(naam, wedstrijd.Soort, date);
+            wedstrijdrepo.EditWedstrijd(wedstrijd);
         }
 
         /// <summary>

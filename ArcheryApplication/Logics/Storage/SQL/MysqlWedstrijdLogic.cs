@@ -41,7 +41,6 @@ namespace ArcheryApplication.Storage
                             cmd.Connection = conn;
 
                             cmd.ExecuteNonQuery();
-                            conn.Close();
                         }
                     }
                 }
@@ -54,7 +53,43 @@ namespace ArcheryApplication.Storage
 
         public void EditWedstrijd(Wedstrijd wedstrijd)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(_connectie))
+                {
+                    if (conn.State != ConnectionState.Open)
+                    {
+                        conn.Open();
+
+                        using (MySqlCommand cmd = new MySqlCommand())
+                        {
+
+                            cmd.CommandText = "UPDATE Wedstrijd SET WedNaam = @wednaam AND WedSoort = @wedsoort AND WedDatum = @weddatum WHERE WedID = @wedid;";
+
+                            cmd.Parameters.AddWithValue("@wedid", wedstrijd.Id);
+                            cmd.Parameters.AddWithValue("@wednaam", wedstrijd.Naam);
+                            cmd.Parameters.AddWithValue("@wedsoort", wedstrijd.Soort);
+                            cmd.Parameters.AddWithValue("@weddatum", wedstrijd.Datum);
+                            if (wedstrijd.Vereniging != null)
+                            {
+                                cmd.Parameters.AddWithValue("@wedvernr", wedstrijd.Vereniging.VerNr);
+                            }
+                            else
+                            {
+                                cmd.Parameters.AddWithValue("@wedvernr", 1034);
+                            }
+
+                            cmd.Connection = conn;
+
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+            catch (NormalException ex)
+            {
+                throw new NormalException(ex.Message);
+            }
         }
 
         public Wedstrijd GetWedstrijdByDate(string date)
