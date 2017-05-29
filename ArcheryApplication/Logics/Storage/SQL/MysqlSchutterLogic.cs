@@ -190,7 +190,6 @@ namespace ArcheryApplication.Storage
 
                                     schutters.Add(schutter);
                                 }
-                                conn.Close();
                                 return schutters;
                             }
                         }

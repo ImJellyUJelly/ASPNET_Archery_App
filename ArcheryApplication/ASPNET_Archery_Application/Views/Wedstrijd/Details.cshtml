@@ -3,8 +3,19 @@
 
 @{
     ViewBag.Title = "Details";
+    var wedId = Model.Id;
 }
-
+@section scripts{
+    <script>
+        var loadWedstrijd = function() {
+            var url = 'api/webapi/' + @wedId;
+            $.getJSON(url).done(function(Model) {
+                $('#target').html(Model.Naam + ' - ' + Model.Datum);
+            });
+        };
+        $(document).ready(loadWedstrijd);
+    </script>
+}
 <h2>Details</h2>
 @using (Html.BeginForm())
 {
@@ -95,3 +106,7 @@
         </div>
     </div>
 }
+<hr/>
+<footer>
+    <p id="target"></p>
+</footer>

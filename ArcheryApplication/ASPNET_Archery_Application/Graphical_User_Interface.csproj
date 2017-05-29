@@ -314,6 +314,10 @@
       <Project>{9794e88f-63e1-4010-92bd-123bb70ef0ce}</Project>
       <Name>Logics</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WebAPI\WebAPI.csproj">
+      <Project>{37d4bcbf-be76-42a0-b709-a9ea506d88fa}</Project>
+      <Name>WebAPI</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

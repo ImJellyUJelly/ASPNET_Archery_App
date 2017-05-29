@@ -172,6 +172,11 @@ namespace ArcheryApplication
             return registratierepo.GetWedstrijdSchutterById(wedstrijdId, schutId);
         }
 
+        public List<Schutter> GetAllSchutters()
+        {
+            return schutterrepo.ListSchutters();
+        }
+
         public Schutter GetSchutterById(int schutterId)
         {
             return schutterrepo.GetSchutterById(schutterId);
