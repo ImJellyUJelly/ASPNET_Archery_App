@@ -132,7 +132,7 @@ namespace ArcheryApplication
                             {
                                 baanindelingrepo.RemoveBanenFromWedstrijd(w, b.Id);
                             }
-                            if (w.GetBanenFromDB() == null)
+                            if (w.GetBanenFromDb() == null)
                             {
                                 wedstrijdrepo.RemoveWedstrijd(w);
                             }

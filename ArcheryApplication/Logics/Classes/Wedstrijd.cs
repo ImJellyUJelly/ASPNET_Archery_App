@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using ArcheryApplication.Storage;
 
 namespace ArcheryApplication.Classes
-{
-    public class Wedstrijd
+{ 
+    public class Wedstrijd 
     {
-        private WedstrijdRepository wedstrijdrepo = new WedstrijdRepository(new MysqlWedstrijdLogic());
-        private BaanRepository banenrepo = new BaanRepository(new MysqlBaanLogic());
-        private SchutterRepository schutterrepo = new SchutterRepository(new MysqlSchutterLogic());
         private VerenigingRepository verenigingrepo = new VerenigingRepository(new MysqlVerenigingLogic());
         private RegistratieRepository registratierepo = new RegistratieRepository(new MysqlRegisterLogic());
         private BaanindelingRepository baanindelingrepo = new BaanindelingRepository(new MysqlBaanindelingLogic());
@@ -164,12 +161,7 @@ namespace ArcheryApplication.Classes
             return _schutters;
         }
 
-        private List<Schutter> GetSchuttersFromDB()
-        {
-            return registratierepo.GetWedstrijdSchutters(this);
-        }
-
-        public List<Baan> GetBanenFromDB()
+        public List<Baan> GetBanenFromDb()
         {
             return baanindelingrepo.GetWedstrijdBanen(this);
         }

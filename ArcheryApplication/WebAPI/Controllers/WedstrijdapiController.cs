@@ -13,7 +13,7 @@ namespace WebAPI.Controllers
         // GET api/<controller>
         public List<Wedstrijd> Get()
         {
-            List<Wedstrijd> wedstrijden = wedstrijdrepo.GetAllWedstrijden();
+            var wedstrijden = wedstrijdrepo.GetAllWedstrijden();
             return wedstrijden;
         }
 

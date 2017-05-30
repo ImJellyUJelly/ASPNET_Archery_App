@@ -23,7 +23,6 @@ namespace ArcheryApplication.Storage
 
                         using (MySqlCommand cmd = new MySqlCommand())
                         {
-
                             cmd.CommandText = "INSERT INTO Wedstrijd (WedNaam, WedSoort, WedDatum, WedVerNr) VALUES (@wednaam, @wedsoort, @weddatum, @wedvernr)";
 
                             cmd.Parameters.AddWithValue("@wednaam", wedstrijd.Naam);
@@ -37,7 +36,6 @@ namespace ArcheryApplication.Storage
                             {
                                 cmd.Parameters.AddWithValue("@wedvernr", 1034);
                             }
-
                             cmd.Connection = conn;
 
                             cmd.ExecuteNonQuery();
