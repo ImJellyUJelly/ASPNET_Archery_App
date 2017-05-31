@@ -84,9 +84,9 @@ namespace ArcheryApplication
             wedstrijdrepo.GetWedstrijdByName(wedstrijd.Naam).LaadBanen();
         }
 
-        public void BewerkWedstrijd(string naam, string date)
+        public void BewerkWedstrijd(int id, string naam, string date)
         {
-            Wedstrijd wedstrijd = wedstrijdrepo.GetWedstrijdByName(naam);
+            Wedstrijd wedstrijd = wedstrijdrepo.GetWedstrijdById(id);
             wedstrijd.BewerkWedstrijd(naam, wedstrijd.Soort, date);
             wedstrijdrepo.EditWedstrijd(wedstrijd);
         }

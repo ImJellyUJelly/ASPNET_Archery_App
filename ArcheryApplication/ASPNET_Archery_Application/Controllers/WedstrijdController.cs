@@ -35,7 +35,7 @@ namespace ASPNET_Archery_Application.Controllers
                 string naam = form["Naam"];
                 string soort = form["Soort"];
                 string datum = form["Datum"];
-                
+
                 app.AddWedstrijd(naam, datum, soort);
                 return RedirectToAction("Index");
             }
@@ -57,10 +57,11 @@ namespace ASPNET_Archery_Application.Controllers
         {
             try
             {
+                int id = Convert.ToInt32(form["Id"]);
                 string naam = form["Naam"];
                 string datum = form["Datum"];
 
-                app.BewerkWedstrijd(naam, datum);
+                app.BewerkWedstrijd(id, naam, datum);
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -106,10 +107,10 @@ namespace ASPNET_Archery_Application.Controllers
                 string naam = schutterCollection["Naam"];
                 int bondsnummer = Convert.ToInt32(schutterCollection["Bondsnummer"]);
                 var schutter = app.GetSchutterByBondsNrEnNaam(bondsnummer, naam);
+                string discipline = schutterCollection["Discipline"];
                 if (schutter == null)
                 {
                     string klasse = schutterCollection["Klasse"];
-                    string discipline = schutterCollection["Discipline"];
                     string geslacht = schutterCollection["Geslacht"];
                     string email = schutterCollection["Emailadres"];
                     string geboortedatum = schutterCollection["Geboortedatum"];
@@ -120,13 +121,13 @@ namespace ASPNET_Archery_Application.Controllers
                     //app.GeefSchutterEenClub(baan.Wedstrijd.Id, bondsnummer, naam);
                 }
                 schutter = app.GetSchutterByBondsNrEnNaam(bondsnummer, naam);
-                app.RegistreerSchutterOpWedstrijd(baan.Wedstrijd.Id, schutter.Id, schutter.Discipline.ToString());
+                app.RegistreerSchutterOpWedstrijd(baan.Wedstrijd.Id, schutter.Id, discipline);
                 if (schutterCollection["Baan.Id"] != null)
                 {
                     app.VoegSchutterToeAanBaan(baan.Id, baan.Wedstrijd.Id, schutter.Id);
                 }
 
-                return RedirectToAction("Details", new {id = baan.Wedstrijd.Id});
+                return RedirectToAction("Details", new { id = baan.Wedstrijd.Id });
             }
             catch (Exception ex)
             {
@@ -140,7 +141,12 @@ namespace ASPNET_Archery_Application.Controllers
             try
             {
                 var schutter = app.GetWedstrijdSchutterById(wedId, id);
-                return View(schutter);
+                if (schutter != null)
+                {
+                    return View(schutter);
+                }
+                return RedirectToAction("Index");
+
             }
             catch (Exception ex)
             {

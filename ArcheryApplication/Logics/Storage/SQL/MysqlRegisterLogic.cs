@@ -9,7 +9,7 @@ namespace ArcheryApplication.Storage
     public class MysqlRegisterLogic : IRegistratieServices
     {
         private readonly string _connectie = "Server = studmysql01.fhict.local;Uid=dbi299244;Database=dbi299244;Pwd=Geschiedenis1500;";
-
+        private MysqlVerenigingLogic verenigingLogic;
         public List<Schutter> GetWedstrijdSchutters(Wedstrijd wedstrijd)
         {
             List<Schutter> schutters = new List<Schutter>();
@@ -53,12 +53,73 @@ namespace ArcheryApplication.Storage
 
         public Schutter GetWedstrijdSchutterById(int wedId, int schutterId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                verenigingLogic = new MysqlVerenigingLogic();
+                using (MySqlConnection conn = new MySqlConnection(_connectie))
+                {
+                    if (conn.State != ConnectionState.Open)
+                    {
+                        conn.Open();
+
+                        using (MySqlCommand cmd = new MySqlCommand())
+                        {
+                            cmd.CommandText = "SELECT DISTINCT SchutID, SchutBondsNr, SchutNaam, SchutGeslacht, RegDiscipline, SchutEmail, SchutGebDatum, SchutOpmerking, KlasseNaam, SchutVerNr " +
+                                              "FROM Registratie R " +
+                                              "LEFT JOIN Schutter S ON S.SchutID = R.RegSchutterID " +
+                                              "LEFT JOIN Klasse K ON K.KlasseID = S.SchutKlasseID " +
+                                              "LEFT JOIN Vereniging V ON V.VerNr = S.SchutVerNr " +
+                                              "WHERE RegSchutterID = @schutId AND RegWedID = @wedId;";
+
+                            cmd.Parameters.AddWithValue("@schutId", schutterId);
+                            cmd.Parameters.AddWithValue("@wedId", wedId);
+
+                            cmd.Connection = conn;
+
+                            using (MySqlDataReader reader = cmd.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    int id = reader.GetInt32(0);
+                                    int bondsnr = reader.GetInt32(1);
+                                    string naam = reader.GetString(2);
+                                    Geslacht geslacht = GetSchutterGeslachtFromDB(reader.GetString(3));
+                                    Discipline discipline =
+                                        (Discipline)Enum.Parse(typeof(Discipline), reader.GetString(4));
+                                    string email = reader.GetString(5);
+                                    DateTime gebdatum = DateTime.Parse(reader.GetString(6));
+                                    string opmerking;
+                                    if (!reader.IsDBNull(7))
+                                    {
+                                        opmerking = reader.GetString(7);
+                                    }
+                                    else
+                                    {
+                                        opmerking = "";
+                                    }
+                                    Klasse klasse = (Klasse)Enum.Parse(typeof(Klasse), reader.GetString(8));
+                                    Vereniging vereniging = verenigingLogic.GetVerenigingById(reader.GetInt32(9));
+
+                                    Schutter schutter = new Schutter(id, bondsnr, naam, email, klasse, discipline,
+                                        geslacht, gebdatum, opmerking, vereniging);
+
+                                    return schutter;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (NormalException ex)
+            {
+                throw new NormalException(ex.Message);
+            }
+            return null;
         }
 
         public void SubscribeSchutterVoorWedstrijd(int wedId, int schutterId, string discipline)
         {
-            try
+            try 
             {
                 using (MySqlConnection conn = new MySqlConnection(_connectie))
                 {
@@ -114,6 +175,20 @@ namespace ArcheryApplication.Storage
             catch (NormalException ex)
             {
                 throw new NormalException(ex.Message);
+            }
+        }
+
+        private Geslacht GetSchutterGeslachtFromDB(string geslacht)
+        {
+            switch (geslacht)
+            {
+                case "M":
+                    return Geslacht.Heren;
+                case "D":
+                    return Geslacht.Dames;
+                default:
+                    return Geslacht.Onzijdig;
+
             }
         }
     }
