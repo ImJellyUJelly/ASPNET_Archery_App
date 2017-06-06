@@ -10,7 +10,7 @@ namespace ArcheryApplication.Storage
     {
         private readonly string _connectie = "Server = studmysql01.fhict.local;Uid=dbi299244;Database=dbi299244;Pwd=Geschiedenis1500;";
         private MysqlVerenigingLogic verenigingLogic;
-        private MysqlBaanLogic baanindelingLogic;
+        private MysqlBaanLogic baanLogic;
         public List<Schutter> GetWedstrijdSchutters(Wedstrijd wedstrijd)
         {
             List<Schutter> schutters = new List<Schutter>();
@@ -52,12 +52,45 @@ namespace ArcheryApplication.Storage
             return null;
         }
 
+        public int GetRegistratieId(int schutterId, int wedstrijdId)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(_connectie))
+                {
+                    if (conn.State != ConnectionState.Open)
+                    {
+                        conn.Open();
+                        using (MySqlCommand cmd = new MySqlCommand())
+                        {
+                            cmd.CommandText = "SELECT RegID FROM Registratie WHERE RegSchutterID = @schutID AND RegWedID = @wedId;";
+
+                            cmd.Parameters.AddWithValue("@wedId", wedstrijdId);
+                            cmd.Parameters.AddWithValue("@schutId", schutterId);
+                            cmd.Connection = conn;
+
+                            using (MySqlDataReader reader = cmd.ExecuteReader())
+                            {
+                                reader.Read();
+                                return reader.GetInt32(0);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (NormalException ex)
+            {
+                throw new NormalException(ex.Message);
+            }
+            return 0;
+        }
+
         public Schutter GetWedstrijdSchutterById(int wedId, int schutterId)
         {
             try
             {
                 verenigingLogic = new MysqlVerenigingLogic();
-                baanindelingLogic = new MysqlBaanLogic();
+                baanLogic = new MysqlBaanLogic();
                 using (MySqlConnection conn = new MySqlConnection(_connectie))
                 {
                     if (conn.State != ConnectionState.Open)
@@ -66,18 +99,12 @@ namespace ArcheryApplication.Storage
 
                         using (MySqlCommand cmd = new MySqlCommand())
                         {
-                            //cmd.CommandText = "SELECT DISTINCT SchutID, SchutBondsNr, SchutNaam, SchutGeslacht, RegDiscipline, SchutEmail, SchutGebDatum, SchutOpmerking, KlasseNaam, SchutVerNr " +
-                            //                  "FROM Registratie R " +
-                            //                  "LEFT JOIN Schutter S ON S.SchutID = R.RegSchutterID " +
-                            //                  "LEFT JOIN Klasse K ON K.KlasseID = S.SchutKlasseID " +
-                            //                  "LEFT JOIN Vereniging V ON V.VerNr = S.SchutVerNr " +
-                            //                  "WHERE RegSchutterID = @schutId AND RegWedID = @wedId;";
-                            cmd.CommandText = "SELECT SchutID, SchutBondsNr, SchutNaam, SchutGeslacht, RegDiscipline, SchutEmail, SchutGebDatum, SchutOpmerking, K.KlasseNaam, SchutVerNr, BaIndelBaanID " +
-                            "FROM BaanIndeling BI " +
-                            "LEFT JOIN Schutter S ON SchutID = BI.BaIndelSchutID " +
-                            "LEFT JOIN Registratie R ON RegSchutterID = S.SchutID " +
-                            "LEFT JOIN Klasse K ON K.KlasseID = SchutKlasseID " +
-                            "WHERE BaIndelSchutID = 48 AND BaIndelWedID = 26;";
+                            cmd.CommandText = "SELECT DISTINCT SchutID, SchutBondsNr, SchutNaam, SchutGeslacht, RegDiscipline, SchutEmail, SchutGebDatum, SchutOpmerking, KlasseNaam, SchutVerNr " +
+                                              "FROM Registratie R " +
+                                              "LEFT JOIN Schutter S ON S.SchutID = R.RegSchutterID " +
+                                              "LEFT JOIN Klasse K ON K.KlasseID = S.SchutKlasseID " +
+                                              "LEFT JOIN Vereniging V ON V.VerNr = S.SchutVerNr " +
+                                              "WHERE RegSchutterID = @schutId AND RegWedID = @wedId;";
 
                             cmd.Parameters.AddWithValue("@schutId", schutterId);
                             cmd.Parameters.AddWithValue("@wedId", wedId);
@@ -107,11 +134,9 @@ namespace ArcheryApplication.Storage
                                     }
                                     Klasse klasse = (Klasse)Enum.Parse(typeof(Klasse), reader.GetString(8));
                                     Vereniging vereniging = verenigingLogic.GetVerenigingById(reader.GetInt32(9));
-                                    int baanId = reader.GetInt32(10);
 
                                     Schutter schutter = new Schutter(id, bondsnr, naam, email, klasse, discipline,
                                         geslacht, gebdatum, opmerking, vereniging);
-                                    schutter.GeefSchutterEenBaan(baanindelingLogic.GetBaanById(baanId));
                                     return schutter;
                                 }
                             }
@@ -198,6 +223,37 @@ namespace ArcheryApplication.Storage
                 default:
                     return Geslacht.Onzijdig;
 
+            }
+        }
+
+        public void SetDisciplineFromSchutter(string discipline, int schutterId, int wedId)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(_connectie))
+                {
+                    if (conn.State != ConnectionState.Open)
+                    {
+                        conn.Open();
+
+                        using (MySqlCommand cmd = new MySqlCommand())
+                        {
+                            cmd.CommandText = "UPDATE Registratie SET RegDiscipline = @discipline WHERE RegSchutterID = @schutterId AND RegWedID = @wedId;";
+
+                            cmd.Parameters.AddWithValue("@discipline", discipline);
+                            cmd.Parameters.AddWithValue("@schutterId", schutterId);
+                            cmd.Parameters.AddWithValue("@wedId", wedId);
+
+                            cmd.Connection = conn;
+
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+            catch (NormalException ex)
+            {
+                throw new NormalException(ex.Message);
             }
         }
     }

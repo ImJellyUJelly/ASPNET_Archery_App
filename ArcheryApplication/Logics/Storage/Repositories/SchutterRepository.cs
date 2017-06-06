@@ -18,6 +18,11 @@ namespace ArcheryApplication.Storage
             return _schutterLogic.GetSchutterById(schutterId);
         }
 
+        public Schutter GetSchutterByName(string name)
+        {
+            return _schutterLogic.GetSchutterByName(name);
+        }
+
         public Schutter GetSchutterByBondsNr(int bondsnr)
         {
             return _schutterLogic.GetSchutterByBondsNr(bondsnr);

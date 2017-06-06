@@ -5,17 +5,6 @@
     ViewBag.Title = "Details";
     var wedId = Model.Id;
 }
-@section scripts{
-    <script>
-        var loadWedstrijd = function() {
-            var url = 'api/webapi/' + @wedId;
-            $.getJSON(url).done(function(Model) {
-                $('#target').html(Model.Naam + ' - ' + Model.Datum);
-            });
-        };
-        $(document).ready(loadWedstrijd);
-    </script>
-}
 <h2>Details</h2>
 @using (Html.BeginForm())
 {
@@ -89,6 +78,7 @@
                                 <td name="@b.Schutter.Klasse">@Html.DisplayFor(model => b.Schutter.Klasse)</td>
                                 <td name="@b.Schutter.Geslacht">@Html.DisplayFor(model => b.Schutter.Geslacht)</td>
                                 <td>@Html.ActionLink("Edit", "EditSchutter", new { id = b.Schutter.Id, wedId = Model.Id })</td>
+                                <td>@Html.ActionLink("Remove", "RemoveSchutter", new { id = b.Schutter.Id, wedId = Model.Id })</td>
                             }
                             else
                             {
@@ -97,6 +87,7 @@
                                 <td>---</td>
                                 <td>---</td>
                                 <td>@Html.ActionLink("Add", "AddSchutter", new { id = b.Id, wedId = Model.Id })</td>
+                                <td></td>
                             }
                         </tr>
                     </tbody>

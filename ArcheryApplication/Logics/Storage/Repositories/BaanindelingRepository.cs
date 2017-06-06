@@ -41,5 +41,10 @@ namespace ArcheryApplication.Storage
         {
             _baanindelingLogic.VerwijderSchutterVanBaan(wedId, schutterId, baanId);
         }
+
+        public Schutter GetSchutterFromWedstrijd(int schutId, int wedId)
+        {
+            return _baanindelingLogic.GetSchutterFromWedstrijd(schutId, wedId);
+        }
     }
 }

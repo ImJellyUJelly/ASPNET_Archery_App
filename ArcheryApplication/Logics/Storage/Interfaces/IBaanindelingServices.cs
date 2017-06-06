@@ -12,6 +12,7 @@ namespace ArcheryApplication.Storage
         void AddBaanToWedstrijd(Baan baan, int wedstrijdId);
         void RemoveBanenFromWedstrijd(Wedstrijd wedstrijd, int baanid);
         void AddSchutterToBaan(int wedId, int schutterId, int baanId);
+        Schutter GetSchutterFromWedstrijd(int schutId, int wedId);
         void VerwijderSchutterVanBaan(int wedId, int schutterId, int baanId);
     }
 }

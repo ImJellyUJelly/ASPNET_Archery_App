@@ -11,6 +11,13 @@
         public Wedstrijd Wedstrijd { get; private set; }
         public Vereniging Vereniging { get; private set; }
 
+        public Baan(int id, int nummer, string letter)
+        {
+            Id = id;
+            Baannummer = nummer;
+            Letter = letter;
+        }
+
         public Baan(int baanNummer, string letter, int afstand)
         {
             Baannummer = baanNummer;
@@ -18,20 +25,14 @@
             Afstand = afstand;
             CreeerBaanId();
         }
-        public Baan(int id, int baannummer, string letter, int afstand, Wedstrijd wedstrijd)
+        public Baan(int id, int baannummer, string letter, int afstand, Wedstrijd wedstrijd) : this(id, baannummer, letter)
         {
-            Id = id;
-            Baannummer = baannummer;
-            Letter = letter;
             Afstand = afstand;
             Wedstrijd = wedstrijd;
             CreeerBaanId();
         }
-        public Baan(int id, int baannummer, string letter, int afstand)
+        public Baan(int id, int baannummer, string letter, int afstand) : this(id, baannummer, letter)
         {
-            Id = id;
-            Baannummer = baannummer;
-            Letter = letter;
             Afstand = afstand;
             CreeerBaanId();
         }
@@ -45,6 +46,11 @@
         public void SetAfstand(int afstand)
         {
             Afstand = afstand;
+        }
+
+        public void SetVereniging(Vereniging vereniging)
+        {
+            Vereniging = vereniging;
         }
 
         public void VoegSchutterToe(Schutter schutter)

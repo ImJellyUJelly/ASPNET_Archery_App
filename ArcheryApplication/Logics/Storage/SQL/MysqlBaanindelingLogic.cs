@@ -11,6 +11,7 @@ namespace ArcheryApplication.Storage
         private readonly string _connectie = "Server = studmysql01.fhict.local;Uid=dbi299244;Database=dbi299244;Pwd=Geschiedenis1500;";
         private MysqlWedstrijdLogic wedstrijdLogic;
         private MysqlVerenigingLogic verenigingLogic;
+        private MysqlBaanLogic baanLogic;
 
         public List<Baan> GetWedstrijdBanen(Wedstrijd wedstrijd)
         {
@@ -28,12 +29,12 @@ namespace ArcheryApplication.Storage
                             cmd.CommandText = "SELECT DISTINCT BaanID, BaanNr, BaanLetter, Afstand, WedID, SchutID, SchutBondsNr, SchutNaam, RegDiscipline, SchutGeslacht, SchutEmail, SchutGebDatum, SchutOpmerking, KlasseNaam, SchutVerNr " +
                                               "FROM Baanindeling baanindel " +
                                               "LEFT JOIN Wedstrijd W ON W.WedID = baanindel.BaIndelWedID " +
+                                              "LEFT JOIN Registratie reg ON RegID = BaIndelSchutID " +
+                                              "LEFT JOIN Schutter S ON S.SchutID = reg.RegSchutterID " +
                                               "LEFT JOIN Baan B ON B.BaanId = baanindel.BaIndelBaanID " +
-                                              "LEFT JOIN Schutter S ON S.SchutID = baanindel.BaIndelSchutID " +
                                               "LEFT JOIN Klasse K ON K.KlasseID = S.SchutKlasseID " +
-                                              "LEFT JOIN Registratie reg ON reg.RegSchutterID = S.SchutID " +
                                               "WHERE BaIndelWedID = @wedId " +
-                                              "ORDER BY WedId, BaanNr, BaanLetter;";
+                                              "ORDER BY BaanNr, BaanLetter;";
 
                             cmd.Parameters.AddWithValue("@wedId", wedstrijd.Id);
                             cmd.Connection = conn;
@@ -232,7 +233,7 @@ namespace ArcheryApplication.Storage
             }
         }
 
-        public void AddSchutterToBaan(int wedId, int schutterId, int baanId)
+        public void AddSchutterToBaan(int wedId, int registratieId, int baanId)
         {
             try
             {
@@ -247,7 +248,7 @@ namespace ArcheryApplication.Storage
                             cmd.CommandText = "UPDATE Baanindeling SET BaIndelSchutID = @schutterId WHERE BaIndelBaanID = @baanId AND BaIndelWedID = @wedId;";
 
                             cmd.Parameters.AddWithValue("@wedId", wedId);
-                            cmd.Parameters.AddWithValue("@schutterId", schutterId);
+                            cmd.Parameters.AddWithValue("@schutterId", registratieId);
                             cmd.Parameters.AddWithValue("@baanId", baanId);
 
                             cmd.Connection = conn;
@@ -291,6 +292,88 @@ namespace ArcheryApplication.Storage
             catch (NormalException ex)
             {
                 throw new NormalException(ex.Message);
+            }
+        }
+
+        public Schutter GetSchutterFromWedstrijd(int schutterId, int wedId)
+        {
+            try
+            {
+                verenigingLogic = new MysqlVerenigingLogic();
+                baanLogic = new MysqlBaanLogic();
+                using (MySqlConnection conn = new MySqlConnection(_connectie))
+                {
+                    if (conn.State != ConnectionState.Open)
+                    {
+                        conn.Open();
+
+                        using (MySqlCommand cmd = new MySqlCommand())
+                        {
+                            cmd.CommandText = "SELECT SchutID, SchutBondsNr, SchutNaam, SchutGeslacht, RegDiscipline, SchutEmail, SchutGebDatum, SchutOpmerking, K.KlasseNaam, SchutVerNr, BaIndelBaanID " +
+                            "FROM BaanIndeling BI " +
+                            "LEFT JOIN Registratie R ON RegID = BaIndelSchutID " +
+                            "LEFT JOIN Schutter S ON SchutID = RegSchutterID " +
+                            "LEFT JOIN Klasse K ON K.KlasseID = SchutKlasseID " +
+                            "WHERE BaIndelSchutID = @schutId AND BaIndelWedID = @wedId;";
+
+                            cmd.Parameters.AddWithValue("@schutId", schutterId);
+                            cmd.Parameters.AddWithValue("@wedId", wedId);
+
+                            cmd.Connection = conn;
+
+                            using (MySqlDataReader reader = cmd.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    int id = reader.GetInt32(0);
+                                    int bondsnr = reader.GetInt32(1);
+                                    string naam = reader.GetString(2);
+                                    Geslacht geslacht = GetSchutterGeslachtFromDB(reader.GetString(3));
+                                    Discipline discipline =
+                                        (Discipline)Enum.Parse(typeof(Discipline), reader.GetString(4));
+                                    string email = reader.GetString(5);
+                                    DateTime gebdatum = DateTime.Parse(reader.GetString(6));
+                                    string opmerking;
+                                    if (!reader.IsDBNull(7))
+                                    {
+                                        opmerking = reader.GetString(7);
+                                    }
+                                    else
+                                    {
+                                        opmerking = "";
+                                    }
+                                    Klasse klasse = (Klasse)Enum.Parse(typeof(Klasse), reader.GetString(8));
+                                    Vereniging vereniging = verenigingLogic.GetVerenigingById(reader.GetInt32(9));
+                                    int baanId = reader.GetInt32(10);
+
+                                    Schutter schutter = new Schutter(id, bondsnr, naam, email, klasse, discipline,
+                                        geslacht, gebdatum, opmerking, vereniging);
+                                    Baan baan = GetBaanIdFromWedstrijd(baanId, wedId);
+                                    baan.VoegSchutterToe(schutter);
+                                    return schutter;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (NormalException ex)
+            {
+                throw new NormalException(ex.Message);
+            }
+            return null;
+        }
+        private Geslacht GetSchutterGeslachtFromDB(string geslacht)
+        {
+            switch (geslacht)
+            {
+                case "M":
+                    return Geslacht.Heren;
+                case "D":
+                    return Geslacht.Dames;
+                default:
+                    return Geslacht.Onzijdig;
+
             }
         }
     }

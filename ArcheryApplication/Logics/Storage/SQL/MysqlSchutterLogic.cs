@@ -107,8 +107,15 @@ namespace ArcheryApplication.Storage
                                     int bondsnr = reader.GetInt32(1);
                                     string naam = reader.GetString(2);
                                     Geslacht geslacht = GetSchutterGeslachtFromDB(reader.GetString(3));
-                                    Discipline discipline =
-                                        (Discipline)Enum.Parse(typeof(Discipline), reader.GetString(4));
+                                    Discipline discipline;
+                                    if (!reader.IsDBNull(4))
+                                    {
+                                        discipline = (Discipline) Enum.Parse(typeof(Discipline), reader.GetString(4));
+                                    }
+                                    else
+                                    {
+                                        discipline = Discipline.Recurve;
+                                    }
                                     string email = reader.GetString(5);
                                     DateTime gebdatum = DateTime.Parse(reader.GetString(6));
                                     string opmerking;
@@ -424,6 +431,78 @@ namespace ArcheryApplication.Storage
                     return Geslacht.Onzijdig;
 
             }
+        }
+
+        public Schutter GetSchutterByName(string name)
+        {
+            try
+            {
+                verenigingLogic = new MysqlVerenigingLogic();
+                using (MySqlConnection conn = new MySqlConnection(_connectie))
+                {
+                    if (conn.State != ConnectionState.Open)
+                    {
+                        conn.Open();
+
+                        using (MySqlCommand cmd = new MySqlCommand())
+                        {
+                            cmd.CommandText = "SELECT DISTINCT SchutID, SchutBondsNr, SchutNaam, SchutGeslacht, RegDiscipline, SchutEmail, SchutGebDatum, SchutOpmerking, KlasseNaam, SchutVerNr " +
+                                              "FROM Schutter S " +
+                                              "LEFT JOIN Klasse K ON K.KlasseID = S.SchutKlasseID " +
+                                              "LEFT JOIN Registratie ON RegSchutterID = SchutID " +
+                                              "LEFT JOIN Vereniging V ON V.VerNr = S.SchutVerNr " +
+                                              "WHERE SchutNaam = @schutNaam;";
+
+                            cmd.Parameters.AddWithValue("@schutNaam", name);
+
+                            cmd.Connection = conn;
+
+                            using (MySqlDataReader reader = cmd.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    int id = reader.GetInt32(0);
+                                    int bondsnr = reader.GetInt32(1);
+                                    string naam = reader.GetString(2);
+                                    Geslacht geslacht = GetSchutterGeslachtFromDB(reader.GetString(3));
+                                    Discipline discipline;
+                                    if (!reader.IsDBNull(4))
+                                    {
+                                        discipline = (Discipline)Enum.Parse(typeof(Discipline), reader.GetString(4));
+                                    }
+                                    else
+                                    {
+                                        discipline = Discipline.Recurve;
+                                    }
+                                    string email = reader.GetString(5);
+                                    DateTime gebdatum = DateTime.Parse(reader.GetString(6));
+                                    string opmerking;
+                                    if (!reader.IsDBNull(7))
+                                    {
+                                        opmerking = reader.GetString(7);
+                                    }
+                                    else
+                                    {
+                                        opmerking = "";
+                                    }
+                                    Klasse klasse = (Klasse)Enum.Parse(typeof(Klasse), reader.GetString(8));
+                                    Vereniging vereniging = verenigingLogic.GetVerenigingById(reader.GetInt32(9));
+
+                                    Schutter schutter = new Schutter(id, bondsnr, naam, email, klasse, discipline,
+                                        geslacht, gebdatum, opmerking, vereniging);
+
+                                    return schutter;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (NormalException ex)
+            {
+                throw new NormalException(ex.Message);
+            }
+            return null;
         }
     }
 }

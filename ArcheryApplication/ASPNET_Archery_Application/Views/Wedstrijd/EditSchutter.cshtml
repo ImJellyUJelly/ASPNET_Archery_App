@@ -1,13 +1,16 @@
 ﻿@model ArcheryApplication.Classes.Schutter
+@using ArcheryApplication.Classes;
 
 @{
     ViewBag.Title = "EditSchutter";
 }
+
 <h2>Bewerk schutter</h2>
 
 
 @using (Html.BeginForm())
 {
+
     @Html.AntiForgeryToken()
 
     @Html.HiddenFor(model => model.Id)
@@ -19,7 +22,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Bondsnummer, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Bondsnummer, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Bondsnummer, new { htmlAttributes = new { @class = "form-control" }, required = "required" })
                 @Html.ValidationMessageFor(model => model.Bondsnummer, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -27,7 +30,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Naam, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Naam, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Naam, new { htmlAttributes = new { @class = "form-control" }, required = "required" })
                 @Html.ValidationMessageFor(model => model.Naam, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -51,38 +54,21 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Geslacht, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <select class="form-control" name="Geslacht">
-                    <option selected disabled hidden>Kies...</option>
-                    <option name="Heren">Heren</option>
-                    <option name="Dames">Dames</option>
-                </select>
+                @Html.DropDownListFor(model => model.Geslacht, EnumHelper.GetSelectList(typeof(Geslacht)), new { @class = "form-control" })
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.Discipline, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <select class="form-control" name="Discipline">
-                    <option selected disabled hidden>Kies...</option>
-                    <option name="Recurve">Recurve</option>
-                    <option name="Compound">Compound</option>
-                    <option name="Longbow">Longbow</option>
-                    <option name="Crossbow">Crossbow</option>
-                </select>
+                @Html.DropDownListFor(model => model.Discipline, EnumHelper.GetSelectList(typeof(Discipline)), new { @class = "form-control" })
             </div>
         </div>
-
+        
         <div class="form-group">
             @Html.LabelFor(model => model.Klasse, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <select class="form-control" name="Klasse">
-                    <option selected disabled hidden>Kies...</option>
-                    <option name="Aspirant">Aspirant</option>
-                    <option name="Cadet">Cadet</option>
-                    <option name="Junior">Junior</option>
-                    <option name="Senior">Senior</option>
-                    <option name="Veteraan">Veteraan</option>
-                </select>
+                @Html.DropDownListFor(model => model.Klasse, EnumHelper.GetSelectList(typeof(Klasse)), new { @class = "form-control" })
             </div>
         </div>
 
@@ -96,16 +82,15 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Bewerk" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Terug naar wedstrijdenoverzicht", "Index")
+    @Html.ActionLink("Terug naar wedstrijd", "Details", new { id = Model.Baan.Wedstrijd.Id })
 </div>
-
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

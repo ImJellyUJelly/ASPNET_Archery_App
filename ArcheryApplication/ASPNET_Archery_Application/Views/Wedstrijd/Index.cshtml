@@ -21,7 +21,7 @@
         <tr>
             <td>
                 <div class="col-md-10">
-                    @item.Naam (@item.Soort.ToString())
+                    @item.Naam (@item.Soort.ToString()) - @item.Datum
                 </div>
                 <div class="col-md-10">
                     @Html.ActionLink("Edit", "Edit", new { Id = @item.Id }, null) | 
