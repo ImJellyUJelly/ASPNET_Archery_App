@@ -56,6 +56,7 @@ namespace ArcheryApplication.Classes
             Geslacht = geslacht;
             Geboortedatum = gebdatum;
             Opmerking = opmerking;
+            Vereniging = vereniging;
             ScoreFormulier = new Scoreformulier();
         }
 

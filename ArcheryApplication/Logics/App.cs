@@ -68,7 +68,8 @@ namespace ArcheryApplication
 
         public Schutter GetWedstrijdSchutterById(int wedId, int schutterId)
         {
-            return registratierepo.GetWedstrijdSchutterById(wedId, schutterId);
+            Schutter schutter = registratierepo.GetWedstrijdSchutterById(wedId, schutterId);
+            return schutter;
         }
 
         public Schutter GetSchutterByBondsNrEnNaam(int bondsnr, string naam)
@@ -213,9 +214,9 @@ namespace ArcheryApplication
             }
         }
 
-        public void GeefSchutterEenClub(int wedid, int bondsnr, string naam)
+        public void GeefSchutterEenClub(int bondsnr, string schutnaam)
         {
-            Schutter schutter = schutterrepo.GetSchutterByNameAndBondsNr(bondsnr, naam);
+            Schutter schutter = schutterrepo.GetSchutterByNameAndBondsNr(bondsnr, schutnaam);
             Vereniging vereniging = verenigingrepo.GetVerenigingById(1034);
 
             schutter.SetVereniging(vereniging);
@@ -243,7 +244,7 @@ namespace ArcheryApplication
         /// <param name="discipline"> Soort boog waarmee geschoten wordt: recurve, compound, barebow of crossbow </param>
         /// <param name="klasse"> Klasse waarin geschoten wordt: aspiranten, cadetten, junioren, senioren, veteranen </param>
         /// <param name="opmerking"> Als de schutter een handicap heeft, of wat er ook te melden moet zijn voor de wedstrijd </param>
-        public void BewerkSchutterInformatie(int wedstrijdId, int bondsnummer, string naam, string email, string geboortedatum, string _geslacht, string _discipline, string _klasse, string opmerking)
+        public void BewerkSchutterInformatie(int wedstrijdId, int baanId, int bondsnummer, string naam, string email, string geboortedatum, string _geslacht, string _discipline, string _klasse, string opmerking)
         {
             try
             {

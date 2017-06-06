@@ -146,7 +146,6 @@ namespace ASPNET_Archery_Application.Controllers
                     return View(schutter);
                 }
                 return RedirectToAction("Index");
-
             }
             catch (Exception ex)
             {
@@ -154,6 +153,43 @@ namespace ASPNET_Archery_Application.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult EditSchutter(FormCollection schutterCollection)
+        {
+            try
+            {
+                var baan = app.GetWedstrijdBaanById(Convert.ToInt32(schutterCollection["Baan.Id"]), Convert.ToInt32(schutterCollection["Baan.Wedstrijd.Id"]));
+                int wedstrijdId = Convert.ToInt32(schutterCollection["Baan.Wedstrijd.Id"]);
+                int baanId = Convert.ToInt32(schutterCollection["Baan.Id"]);
+                int schutterId = Convert.ToInt32(schutterCollection["Id"]);
+
+                var schutter = app.GetWedstrijdSchutterById(wedstrijdId, schutterId);
+
+                string naam = schutterCollection["Naam"];
+                int bondsnummer = Convert.ToInt32(schutterCollection["Bondsnummer"]);
+                string discipline = schutterCollection["Discipline"];
+                string klasse = schutterCollection["Klasse"];
+                string geslacht = schutterCollection["Geslacht"];
+                string email = schutterCollection["Emailadres"];
+                string geboortedatum = schutterCollection["Geboortedatum"];
+                string opmerking = schutterCollection["Opmerking"];
+
+                if (schutter != null)
+                {
+                    app.BewerkSchutterInformatie(wedstrijdId, baanId, 
+                        bondsnummer, naam, email, geboortedatum, geslacht, discipline, klasse, opmerking);
+                    app.GeefSchutterEenClub(bondsnummer, naam);
+                }
+                return RedirectToAction("Details", new {id = wedstrijdId});
+            }
+
+            catch (Exception ex)
+            {
+                return HttpNotFound(ex.Message);
+            }
+        }
+
+        [HttpPost]
         public ActionResult Delete(int id)
         {
             try

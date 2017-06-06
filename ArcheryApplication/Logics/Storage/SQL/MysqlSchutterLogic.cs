@@ -255,7 +255,7 @@ namespace ArcheryApplication.Storage
                             cmd.CommandText =
                                 "UPDATE Schutter SET SchutBondsNr = @schutterBondsnr, SchutNaam = @schutterNaam, SchutGeslacht = @schutterGeslacht, " +
                                 "SchutEmail = @schutterEmail, SchutGebDatum = @schutterGebdatum, SchutOpmerking = @schutterOpmerking, " +
-                                "SchutKlasseId = @schutterKlasse, SchutVerNr = @schutterVerNr" +
+                                "SchutKlasseId = @schutterKlasse, SchutVerNr = @schutterVerNr " +
                                 "WHERE SchutID = @schutterId;";
 
                             cmd.Parameters.AddWithValue("@schutterId", schutter.Id);

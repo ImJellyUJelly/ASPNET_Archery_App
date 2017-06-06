@@ -62,20 +62,12 @@ namespace ArcheryApplication.Storage
                         using (MySqlCommand cmd = new MySqlCommand())
                         {
 
-                            cmd.CommandText = "UPDATE Wedstrijd SET WedNaam = @wednaam AND WedSoort = @wedsoort AND WedDatum = @weddatum WHERE WedID = @wedid;";
+                            cmd.CommandText = "UPDATE Wedstrijd SET WedNaam = @wednaam, WedSoort = @wedsoort, WedDatum = @weddatum WHERE WedID = @wedid;";
 
                             cmd.Parameters.AddWithValue("@wedid", wedstrijd.Id);
                             cmd.Parameters.AddWithValue("@wednaam", wedstrijd.Naam);
                             cmd.Parameters.AddWithValue("@wedsoort", wedstrijd.Soort);
                             cmd.Parameters.AddWithValue("@weddatum", wedstrijd.Datum);
-                            if (wedstrijd.Vereniging != null)
-                            {
-                                cmd.Parameters.AddWithValue("@wedvernr", wedstrijd.Vereniging.VerNr);
-                            }
-                            else
-                            {
-                                cmd.Parameters.AddWithValue("@wedvernr", 1034);
-                            }
 
                             cmd.Connection = conn;
 
