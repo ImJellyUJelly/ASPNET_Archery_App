@@ -32,25 +32,6 @@ namespace ArcheryApplication
         }
 
         #region Wedstrijden 
-
-        //public List<Wedstrijd> GetWedstrijdByClubNr(int clubnr)
-        //{
-        //    //TODO
-        //    return wedstrijdrepo.ListWedstrijden();
-        //}
-
-        //public List<Wedstrijd> GetWedstrijdByDate(string date)
-        //{
-        //    //TODO
-        //    return wedstrijdrepo.ListWedstrijden();
-        //}
-
-        //public List<Wedstrijd> GetWedstrijdBySoort(string soort)
-        //{
-        //    //TODO
-        //    return wedstrijdrepo.ListWedstrijden();
-        //}
-
         /// <summary>
         /// Geeft alle wedstrijden.
         /// </summary>
@@ -97,18 +78,6 @@ namespace ArcheryApplication
             Soort soort = (Soort)Enum.Parse(typeof(Soort), _soort);
             wedstrijd.BewerkWedstrijd(naam, soort, date);
             wedstrijdrepo.EditWedstrijd(wedstrijd);
-        }
-
-        /// <summary>
-        /// Deze methode returned 1 wedstrijd, nadat er op een wedstrijd in de lijst is geklikt.
-        /// </summary>
-        /// <param name="wedstrijdnaam">De naam van de wedstrijd</param>
-        /// <param name="soort">Het Soort wedstrijd</param>
-        /// <param name="date">De datum van de wedstrijd, format: dd/MM/yyyy </param>
-        /// <returns>Een wedstrijd</returns>
-        public Wedstrijd GetWedstrijd(string wedstrijdnaam, string soort, string date)
-        {
-            throw new NotImplementedException();
         }
 
         public Wedstrijd GetWedstrijdById(int id)
@@ -162,7 +131,6 @@ namespace ArcheryApplication
         }
 
         #endregion
-
         #region Schutters
 
         /// <summary>
@@ -186,16 +154,10 @@ namespace ArcheryApplication
             return registratierepo.GetWedstrijdSchutterById(wedstrijdId, schutId);
         }
 
-        public List<Schutter> GetAllSchutters()
-        {
-            return schutterrepo.ListSchutters();
-        }
-
         public Schutter GetSchutterById(int schutterId)
         {
             return schutterrepo.GetSchutterById(schutterId);
         }
-
 
         public Schutter GetSchutterByName(string naam)
         {
@@ -238,18 +200,7 @@ namespace ArcheryApplication
 
             schutter.SetVereniging(vereniging);
         }
-
-        /// <summary>
-        /// Geef 1 score aan een schutter.
-        /// </summary>
-        /// <param name="wedstrijdId"> Het ID van een wedstrijd </param>
-        /// <param name="score"> De score is de hoeveelheid punten van alle pijlen van 1 afstand </param>
-        /// <param name="schutterId"> Het ID van een schutter </param>
-        public void GeefScoreAanSchutter(int wedstrijdId, int score, int schutterId)
-        {
-            throw new NotImplementedException();
-        }
-
+         
         /// <summary>
         /// Deze methode is voor het bewerken van een schutter. Alle informatie wordt geupdated.
         /// </summary>
